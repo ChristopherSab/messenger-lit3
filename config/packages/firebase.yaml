@@ -1,0 +1,5 @@
+kreait_firebase:
+  projects:
+    my_project:
+      credentials: '%kernel.project_dir%/config/secret/chat-messaging-1e87d-61d35446a782.json'
+      database_uri: 'https://chat-messaging-1e87d-default-rtdb.firebaseio.com/'
