@@ -13,7 +13,10 @@ if ($_SERVER['APP_DEBUG']) {
     umask(0000);
 
     Debug::enable();
+
 }
+
+
 
 $kernel = new Kernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG']);
 $request = Request::createFromGlobals();
