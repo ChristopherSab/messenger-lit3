@@ -28,7 +28,7 @@ class TestController extends AbstractController
         $reference = $this->database->getReference('/email');
         $snapshot = $reference->getSnapshot();
         $value = $snapshot->getValue();
-        dd($value);
+        dd('This is a test......My Email Address is '.$value);
 
     }
 
