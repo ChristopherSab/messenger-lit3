@@ -10,7 +10,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8d05e92a-e58a-43b3-acc8-f3873582ec8f" name="Default Changelist" comment="" />
+    <list default="true" id="8d05e92a-e58a-43b3-acc8-f3873582ec8f" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -181,7 +183,7 @@
       <option name="presentableId" value="Default" />
       <updated>1608652914427</updated>
       <workItem from="1608652916288" duration="8605000" />
-      <workItem from="1609751462189" duration="14377000" />
+      <workItem from="1609751462189" duration="15256000" />
     </task>
     <servers />
   </component>
@@ -205,10 +207,10 @@
       <screen x="2048" y="0" width="1920" height="1080" />
     </state>
     <state x="2301" y="273" key="NewPhpClassDialog/0.0.2048.1152/2048.0.1920.1080@2048.0.1920.1080" timestamp="1609761135836" />
-    <state x="2573" y="470" key="NewPhpFileDialog" timestamp="1608734895735">
+    <state x="2573" y="470" key="NewPhpFileDialog" timestamp="1609859563598">
       <screen x="2048" y="0" width="1920" height="1080" />
     </state>
-    <state x="2573" y="470" key="NewPhpFileDialog/0.0.2048.1152/2048.0.1920.1080@2048.0.1920.1080" timestamp="1608734895735" />
+    <state x="2573" y="470" key="NewPhpFileDialog/0.0.2048.1152/2048.0.1920.1080@2048.0.1920.1080" timestamp="1609859563598" />
     <state x="2289" y="249" key="RollbackChangesDialog" timestamp="1608737795891">
       <screen x="2048" y="0" width="1920" height="1080" />
     </state>
