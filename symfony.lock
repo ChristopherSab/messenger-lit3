@@ -1,4 +1,16 @@
 {
+    "behat/behat": {
+        "version": "v3.8.1"
+    },
+    "behat/gherkin": {
+        "version": "v4.6.2"
+    },
+    "behat/mink-goutte-driver": {
+        "version": "v1.2.1"
+    },
+    "behat/transliterator": {
+        "version": "v1.3.0"
+    },
     "composer/package-versions-deprecated": {
         "version": "1.11.99.1"
     },
@@ -96,6 +108,9 @@
     "egulias/email-validator": {
         "version": "2.1.25"
     },
+    "fabpot/goutte": {
+        "version": "v3.3.1"
+    },
     "fakerphp/faker": {
         "version": "v1.13.0"
     },
@@ -105,8 +120,29 @@
     "firebase/php-jwt": {
         "version": "v5.2.0"
     },
-    "friendsofphp/proxy-manager-lts": {
-        "version": "v1.0.1"
+    "friends-of-behat/mink": {
+        "version": "v1.8.0"
+    },
+    "friends-of-behat/mink-browserkit-driver": {
+        "version": "v1.4.0"
+    },
+    "friends-of-behat/mink-extension": {
+        "version": "v2.4.0"
+    },
+    "friends-of-behat/symfony-extension": {
+        "version": "2.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "2.0",
+            "ref": "3d21344765fd3440a85bdd27d4cada186ec628bd"
+        },
+        "files": [
+            "behat.yml.dist",
+            "config/services_test.yaml",
+            "features/demo.feature",
+            "tests/Behat/DemoContext.php"
+        ]
     },
     "giggsey/libphonenumber-for-php": {
         "version": "8.12.15"
@@ -147,15 +183,6 @@
     "kreait/firebase-tokens": {
         "version": "1.14.0"
     },
-    "laminas/laminas-code": {
-        "version": "3.5.1"
-    },
-    "laminas/laminas-eventmanager": {
-        "version": "3.3.0"
-    },
-    "laminas/laminas-zendframework-bridge": {
-        "version": "1.1.1"
-    },
     "lcobucci/jwt": {
         "version": "3.4.2"
     },
@@ -167,6 +194,9 @@
     },
     "nikic/php-parser": {
         "version": "v4.10.4"
+    },
+    "ocramius/proxy-manager": {
+        "version": "2.2.3"
     },
     "phpdocumentor/reflection-common": {
         "version": "2.2.0"
@@ -185,9 +215,6 @@
     },
     "psr/event-dispatcher": {
         "version": "1.0.0"
-    },
-    "psr/http-client": {
-        "version": "1.0.1"
     },
     "psr/http-message": {
         "version": "1.0.1"
@@ -600,6 +627,12 @@
     },
     "webmozart/assert": {
         "version": "1.9.1"
+    },
+    "zendframework/zend-code": {
+        "version": "3.4.1"
+    },
+    "zendframework/zend-eventmanager": {
+        "version": "3.2.1"
     },
     "zenstruck/foundry": {
         "version": "v1.6.0"
