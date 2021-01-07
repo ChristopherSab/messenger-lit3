@@ -10,7 +10,6 @@ class UserFixture extends Fixture
 {
     public function load(ObjectManager $manager)
     {
-
         $user = new User();
         $user->setEmail('DonaldTrump20@thewhitehouse.org');
         $user->setUsername('Jonathan20');
@@ -20,4 +19,5 @@ class UserFixture extends Fixture
         $manager->persist($user);
         $manager->flush();
     }
+
 }
