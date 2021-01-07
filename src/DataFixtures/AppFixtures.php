@@ -13,9 +13,5 @@ class AppFixtures extends Fixture
     {
         //UserFactory::new()->createMany(3);
 
-        $user = new User();
-        $user->setUsername('Jonathan');
-        $user->setPassword('123456');
-
     }
 }
