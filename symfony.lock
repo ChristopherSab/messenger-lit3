@@ -96,6 +96,9 @@
     "egulias/email-validator": {
         "version": "2.1.25"
     },
+    "fakerphp/faker": {
+        "version": "v1.13.0"
+    },
     "fig/http-message-util": {
         "version": "1.1.5"
     },
@@ -597,5 +600,8 @@
     },
     "webmozart/assert": {
         "version": "1.9.1"
+    },
+    "zenstruck/foundry": {
+        "version": "v1.6.0"
     }
 }
