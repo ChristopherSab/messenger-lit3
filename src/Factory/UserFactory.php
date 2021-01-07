@@ -29,7 +29,9 @@ final class UserFactory extends ModelFactory
     protected function getDefaults(): array
     {
         return [
-            // TODO add your default values here (https://github.com/zenstruck/foundry#model-factories)
+            'username' => self::faker()->realText(),
+            'password' => self::faker()->password(),
+            'email' => self::faker()->email
         ];
     }
 
