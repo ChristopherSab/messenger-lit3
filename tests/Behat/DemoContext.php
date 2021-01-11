@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Behat;
 
 use Behat\Behat\Context\Context;
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -23,9 +24,11 @@ final class DemoContext implements Context
     /** @var Response|null */
     private $response;
 
+
     public function __construct(KernelInterface $kernel)
     {
         $this->kernel = $kernel;
+
     }
 
     /**

@@ -3,5 +3,13 @@ default:
     default:
       contexts:
         - App\Tests\Behat\DemoContext
+        - App\Tests\Behat\FeatureContext
+        - Behat\MinkExtension\Context\MinkContext
   extensions:
     FriendsOfBehat\SymfonyExtension: null
+    Behat\MinkExtension:
+      base_url: https://symfony-sandbox.dev.wrenkitchens.com/
+      goutte: ~
+      sessions:
+        symfony:
+          symfony: ~
