@@ -8,6 +8,7 @@ use App\Entity\User;
 use Behat\Behat\Context\Context;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * This context class contains the definitions of the steps used by the demo
@@ -22,11 +23,14 @@ final class FeatureContext implements Context
     /** @var KernelInterface */
     private $kernel;
 
+    private $encoder;
 
-    public function __construct(KernelInterface $kernel)
+
+    public function __construct(KernelInterface $kernel, UserPasswordEncoderInterface $encoder)
     {
         $this->kernel = $kernel;
         self::$container = $kernel->getContainer();
+        $this->encoder = $encoder;
     }
 
 
@@ -39,6 +43,26 @@ final class FeatureContext implements Context
         $user->setUsername($username);
         $user->setEmail($email);
         $user->setPassword($password);
+
+
+        $em = self::$container->get('doctrine')
+            ->getManager();
+        $em->persist($user);
+        $em->flush();
+    }
+
+    /**
+     * @Given there is a user :username with password :password
+     */
+    public function thereIsAUserWithPassword($username, $password)
+    {
+        $user = new User();
+        $user->setUsername($username);
+        $user->setEmail('test@example.com');
+        $plainPassword = $password;
+
+        $encoded = $this->encoder->encodePassword($user, $plainPassword);
+        $user->setPassword($encoded);
 
 
         $em = self::$container->get('doctrine')

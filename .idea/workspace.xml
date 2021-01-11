@@ -11,14 +11,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8d05e92a-e58a-43b3-acc8-f3873582ec8f" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/features/registration.feature" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/Behat/FeatureContext.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/features/authentication.feature" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/behat.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/behat.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/SecurityController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/SecurityController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/User.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/Behat/DemoContext.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/Behat/DemoContext.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/Behat/registration.feature" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/Behat/FeatureContext.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/Behat/FeatureContext.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -236,7 +231,7 @@
       <option name="presentableId" value="Default" />
       <updated>1608652914427</updated>
       <workItem from="1608652916288" duration="8605000" />
-      <workItem from="1609751462189" duration="62765000" />
+      <workItem from="1609751462189" duration="65808000" />
     </task>
     <servers />
   </component>
