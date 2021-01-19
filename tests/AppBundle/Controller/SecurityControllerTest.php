@@ -5,6 +5,7 @@ namespace App\Tests\AppBundle\Controller;
 
 
 use App\Entity\User;
+use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManager;
 use Liip\FunctionalTestBundle\Test\WebTestCase;
 use Symfony\Bundle\FrameworkBundle\Client;
@@ -22,24 +23,50 @@ class SecurityControllerTest extends WebTestCase
 
     protected function setUp(): void
     {
+
         $this->client = $this->makeClient();
         $kernel = self::bootKernel();
         $this->entityManager =$kernel->getContainer()->get('doctrine')->getManager();
 
         parent::setUp();
+
+        $purger = new ORMPurger($this->entityManager);
+        $purger->purge();
     }
 
-    public function testTheRegistrationPageLoads()
+    public function testLoginFormsEmptyUserInputValidation()
     {
-        $this->client->request('GET', '/register');
+        $crawler = $this->client->request('GET', '/login');
         $this->assertStatusCode(200, $this->client);
+
+        $form = $crawler->selectButton('login_form[login]')->form();
+
+        $this->client->submit($form);
+
+        $this->assertStatusCode(302, $this->client);
+        $this->assertResponseRedirects('/login');
     }
 
-    public function testTheLoginPageLoads()
+    public function testLoginFormsEmptyPasswordValidation()
     {
-        $this->client->request('GET', '/login');
+        $crawler = $this->client->request('GET', '/login');
         $this->assertStatusCode(200, $this->client);
+
+        $form = $crawler->selectButton('login_form[login]')->form();
+
+        $formData = [
+            'login_form[username]' => 'SuperUser'
+        ];
+
+        $form->setValues($formData);
+        $this->client->submit($form);
+
+        $this->assertStatusCode(302, $this->client);
+        $this->assertResponseRedirects('/login');
     }
+
+
+
 
     public function testRegistrationIsSuccessful()
     {
@@ -71,44 +98,7 @@ class SecurityControllerTest extends WebTestCase
         $this->assertSame('SomeUser', $user->getUsername());
     }
 
-   /*
-
-    public function testLoginFormEmptyInputValidation()
-    {
-        $crawler = $this->client->request('GET', '/login');
-        $this->assertStatusCode(200, $this->client);
-
-        $form = $crawler->selectButton('Sign in')->form();
-
-        $this->client->submit($form);
-
-        $this->assertStatusCode(302, $this->client);
-        $this->assertPageTitleSame('Register');
-    }
-
-    public function testLoginFormEmptyPasswordValidation()
-    {
-        $crawler = $this->client->request('GET', '/login');
-        $this->assertStatusCode(200, $this->client);
-
-        $form = $crawler->selectButton('Sign in')->form();
-
-        $formData = [
-            'login_form[email]' => 'evgenij907@gmail.com'
-        ];
-
-        $form->setValues($formData);
-        $this->client->submit($form);
-
-        $this->assertStatusCode(302, $this->client);
-        $this->assertResponseRedirects('/login');
-    }
-
-*/
-
-
-
-
+    
 
     protected function tearDown(): void
     {
