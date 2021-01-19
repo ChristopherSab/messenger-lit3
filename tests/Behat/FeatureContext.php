@@ -59,10 +59,10 @@ final class FeatureContext implements Context
         $user = new User();
         $user->setUsername($username);
         $user->setEmail('test@example.com');
-        $plainPassword = $password;
 
-        $encoded = $this->encoder->encodePassword($user, $plainPassword);
-        $user->setPassword($encoded);
+        $plainPassword = $password;
+        $encodedPassword = $this->encoder->encodePassword($user, $plainPassword);
+        $user->setPassword($encodedPassword);
 
 
         $em = self::$container->get('doctrine')

@@ -186,6 +186,9 @@
     "lcobucci/jwt": {
         "version": "3.4.2"
     },
+    "liip/functional-test-bundle": {
+        "version": "4.2.0"
+    },
     "monolog/monolog": {
         "version": "2.2.0"
     },
@@ -725,6 +728,9 @@
     },
     "zendframework/zend-eventmanager": {
         "version": "3.2.1"
+    },
+    "zenstruck/callback": {
+        "version": "v1.2.0"
     },
     "zenstruck/foundry": {
         "version": "v1.6.0"

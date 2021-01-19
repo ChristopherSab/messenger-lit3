@@ -3,7 +3,6 @@
 {% block title %}Log in!{% endblock %}
 
 {% block body %}
-<form method="post">
     {% if error %}
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
@@ -15,6 +14,16 @@
     {% endif %}
 
     <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+
+
+    {{ form_start(loginForm) }}
+    {{ form_row(loginForm.username) }}
+    {{ form_row(loginForm.password) }}
+    {{ form_row(loginForm.login) }}
+    {{ form_end(loginForm) }}
+
+
+    {#
     <label for="inputUsername">Username</label>
     <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control" required autofocus>
     <label for="inputPassword">Password</label>
@@ -23,6 +32,8 @@
     <input type="hidden" name="_csrf_token"
            value="{{ csrf_token('authenticate') }}"
     >
+
+    #}
 
     {#
         Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
@@ -34,9 +45,4 @@
             </label>
         </div>
     #}
-
-    <button class="btn btn-lg btn-primary" type="submit">
-        Sign in
-    </button>
-</form>
 {% endblock %}
