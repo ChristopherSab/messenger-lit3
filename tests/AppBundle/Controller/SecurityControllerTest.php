@@ -98,7 +98,6 @@ class SecurityControllerTest extends WebTestCase
         $this->assertSame('SomeUser', $user->getUsername());
     }
 
-    
 
     protected function tearDown(): void
     {

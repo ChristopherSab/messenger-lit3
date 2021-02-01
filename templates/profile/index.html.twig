@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profile{% endblock %}
+
+{% block body %}
+
+    <h1>To Proceed Please Enter Your Bio</h1>
+
+    {{ form_start(profileForm) }}
+    {{ form_row(profileForm.bio) }}
+    {{ form_row(profileForm.city) }}
+    {{ form_row(profileForm.register) }}
+    {{ form_end(profileForm) }}
+
+{% endblock %}
