@@ -11,29 +11,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8d05e92a-e58a-43b3-acc8-f3873582ec8f" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Controller/ChatHomeController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Controller/ProfileRegistrationController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Form/ProfileFormType.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/chat/index.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/message.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/profile/index.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/test/app.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/chat_messaging.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/chat_messaging.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/symfony2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/symfony2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/js/testFileDelete.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Controller/MessageController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Form/ChatFormType.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/bundles.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/bundles.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/SecurityController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/SecurityController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/User.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Form/RegistrationFormType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/RegistrationFormType.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/UserRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/UserRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Security/LoginFormAuthenticator.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Security/LoginFormAuthenticator.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/symfony.lock" beforeDir="false" afterPath="$PROJECT_DIR$/symfony.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/ChatHomeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ChatHomeController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/base.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/AppBundle/Controller/SecurityControllerTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AppBundle/Controller/SecurityControllerTest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/chat/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/chat/index.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -250,11 +235,11 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/assets" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/public" />
       <recent name="$PROJECT_DIR$/assets/js" />
       <recent name="$PROJECT_DIR$/src/Assests" />
-      <recent name="$PROJECT_DIR$/features" />
     </key>
   </component>
   <component name="RunManager">
@@ -273,7 +258,7 @@
       <updated>1608652914427</updated>
       <workItem from="1608652916288" duration="8605000" />
       <workItem from="1609751462189" duration="77958000" />
-      <workItem from="1610718010390" duration="117020000" />
+      <workItem from="1610718010390" duration="148092000" />
     </task>
     <servers />
   </component>
@@ -297,14 +282,14 @@
       <screen x="2048" y="0" width="1920" height="1080" />
     </state>
     <state x="2379" y="199" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.2048.1152/2048.0.1920.1080@2048.0.1920.1080" timestamp="1610021262267" />
-    <state x="2348" y="112" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1610979479487">
+    <state x="2348" y="112" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1612269529853">
       <screen x="2048" y="0" width="1920" height="1080" />
     </state>
-    <state x="2348" y="112" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.2048.1152/2048.0.1920.1080@2048.0.1920.1080" timestamp="1610979479487" />
-    <state x="2378" y="302" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1611142244898">
+    <state x="2348" y="112" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.2048.1152/2048.0.1920.1080@2048.0.1920.1080" timestamp="1612269529853" />
+    <state x="2378" y="302" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1612274338013">
       <screen x="2048" y="0" width="1920" height="1080" />
     </state>
-    <state x="2378" y="302" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.2048.1152/2048.0.1920.1080@2048.0.1920.1080" timestamp="1611142244898" />
+    <state x="2378" y="302" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.2048.1152/2048.0.1920.1080@2048.0.1920.1080" timestamp="1612274338013" />
     <state width="254" height="195" key="DatabaseViewActions_Filter" timestamp="1610022827899">
       <screen x="2048" y="0" width="1920" height="1080" />
     </state>
@@ -329,10 +314,10 @@
       <screen x="2048" y="0" width="1920" height="1080" />
     </state>
     <state x="2311" y="282" key="IDE.errors.dialog/0.0.2048.1152/2048.0.1920.1080@2048.0.1920.1080" timestamp="1610722540304" />
-    <state x="2451" y="520" key="NewPhpClassDialog" timestamp="1611142237434">
+    <state x="2451" y="520" key="NewPhpClassDialog" timestamp="1612265274106">
       <screen x="2048" y="0" width="1920" height="1080" />
     </state>
-    <state x="2451" y="520" key="NewPhpClassDialog/0.0.2048.1152/2048.0.1920.1080@2048.0.1920.1080" timestamp="1611142237434" />
+    <state x="2451" y="520" key="NewPhpClassDialog/0.0.2048.1152/2048.0.1920.1080@2048.0.1920.1080" timestamp="1612265274106" />
     <state x="2573" y="470" key="NewPhpFileDialog" timestamp="1609859563598">
       <screen x="2048" y="0" width="1920" height="1080" />
     </state>

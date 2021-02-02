@@ -1,71 +1,21 @@
 
-{#
+
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+{% endblock %}
+
 
 {% block body %}
-
-#}
-
-
-
-{# ---------------------------------------- JavaScript ---------------------------------  #}
-{# -------------------------------------------------------------------------------------  #}
-{# ---------------------------------------- JavaScript ---------------------------------  #}
-
-<!-- The core Firebase JS SDK is always required and must be listed first -->
-<script src="https://www.gstatic.com/firebasejs/8.2.4/firebase-app.js"></script>
-
-<!-- TODO: Add SDKs for Firebase products that you want to use
-     https://firebase.google.com/docs/web/setup#available-libraries -->
-<script src="https://www.gstatic.com/firebasejs/8.2.4/firebase-database.js"></script>
-
-<script>
-    // Your web app's Firebase configuration
-    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-    var firebaseConfig = {
-        apiKey: "AIzaSyCVDOntQpmpL_RkL5qaTS9ibiizUu4VS1E",
-        authDomain: "chat-messaging-1e87d.firebaseapp.com",
-        databaseURL: "https://chat-messaging-1e87d-default-rtdb.firebaseio.com",
-        projectId: "chat-messaging-1e87d",
-        storageBucket: "chat-messaging-1e87d.appspot.com",
-        messagingSenderId: "452266648798",
-        appId: "1:452266648798:web:69e7ea4cadce50a96dce4f",
-        measurementId: "G-306C1Z0N9Z"
-    };
-
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-
-
-
-
-
-
-</script>
-
-{# ---------------------------------------- JavaScript ---------------------------------  #}
-{# -------------------------------------------------------------------------------------  #}
-{# ---------------------------------------- JavaScript ---------------------------------  #}
-
-
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-    </head>
-
-<body>
 
     <nav class=" navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             {% if app.user %}
             <a class="navbar-brand" href="#">Welcome {{ app.user.username  }}</a>
+                <div id="user" style="display: none;">{{ app.user.username }}</div>
+                <div id="receiver" style="display: none;"></div>
             {% endif %}
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -80,7 +30,6 @@
             </div>
         </div>
     </nav>
-
 
     <main class="content">
         <div class="container p-0">
@@ -128,12 +77,12 @@
                                 <div  class="flex-grow-1 pl-3">
 
                                     <strong id="currentChatUserName"> </strong>
+
                                 </div>
                                 {# ------ Other User ----   #}
 
                             </div>
                         </div>
-
 
                         {# ------ Chat Messages ----   #}
                         <div class="position-relative">
@@ -164,16 +113,15 @@
                             </div>
                         </div>
 
-
-
+                        <ul id="messages"></ul>
 
                         {# ------ Send Messages ----   #}
-
                         <div class="flex-grow-0 py-3 px-4 border-top">
-                            <form class="input-group" onsubmit="return sendMessage();">
-                                <input id="message" class="form-control" placeholder="Type your message" >
-                                <input type="submit" class="btn btn-primary" >
-                            </form>
+                            {{ form_start(chatForm, {attr: {id: "form"}}) }}
+                                {{ form_row(chatForm.image) }}
+                                {{ form_row(chatForm.message) }}
+                                <button id="form-submit" type="submit" class="btn btn-primary">Send Message</button>
+                            {{ form_end(chatForm) }}
                         </div>
 
                     </div>
@@ -183,82 +131,48 @@
     </main>
 
 
+    <script>
 
-<script>
+        let currentChatUserName = document.getElementById('currentChatUserName');
+        let receiver = document.getElementById('receiver');
 
+        function loadSelectedChat(e){
 
-    let contactName = document.getElementById("contactName").innerHTML;
-    let currentChatUserName = document.getElementById("currentChatUserName");
+            currentChatUserName.innerHTML = e.innerText;
+            receiver = e.innerText;
 
+            return false;
 
-    function loadSelectedChat(e){
+        }
 
-        currentChatUserName.innerHTML = e.innerText;
+        $(function () {
 
-        return false;
+            let user = $('#user');
 
-    }
+            $('#form-submit').on('click', function() {
 
-    
-    function sendMessage(){
+                let formElement = $('#form');
+                let formData = new FormData(formElement[0]);
 
-        //get message
-        var message = document.getElementById("message").value;
+                e.preventDefault();
+                $.ajax({
+                    type: 'POST',
+                    url: '/chat_session/'+'{'+user+'}',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function() {
+                        alert('message sent');
+                    },
+                    error: function(){
+                        alert('error sending message');
+                    }
 
-        //save into database
-        firebase.database().ref("message").push().set({
-            "message": message
+                })
+
+            });
 
         });
+    </script>
 
-        alert('this works');
-
-        //prevent form from submitting
-        return false;
-    }
-
-
-</script>
-
-
-</body>
-
-</html>
-
-
-
-
-
-
-
-
-
-
-
-  {#  <ul>
-        {% for user in users %}
-            <li> {{ user.username }}</li>
-        {% endfor %}
-    </ul>
-
-  #}
-
-    {#
-
-    <section>
-
-{% for user in users %}
-    <div class=" border border-primary container-fluid ml-lg-4" >
-        <h6> {{ user.username }} </h6>
-    </div>
-{% endfor %}
-
-</section>
-
-
-    #}
-
-
-    {#
- {% endblock %}
-     #}
+{% endblock %}
