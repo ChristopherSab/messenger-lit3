@@ -67,14 +67,13 @@ class ChatHomeController extends AbstractController
         if(!$user){
             return new Response('Unable To Find user', 400);
         }
-
-
+        
         $conversationID = $this->database->getReference('/userChats/'.$loggedInUser.'/'.$contact)->getChildKeys();
 
         $reference = $this->database->getReference('messages/'.$conversationID[2].'/' )->orderByChild('time');
 
         $messages = $reference->getValue();
-        
+
         dump($messages);
 
         return new Response();
