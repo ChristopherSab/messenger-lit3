@@ -68,19 +68,21 @@ class ChatHomeController extends AbstractController
             return new Response('Unable To Find user', 400);
         }
         
-        $conversationID = $this->database->getReference('/userChats/'.$loggedInUser.'/'.$contact)->getChildKeys();
+        $reference = $this->database->getReference('/userChats/'.$loggedInUser.'/'.$contact.'/');
+
+        $conversationID = $reference->getValue()['conversationID'];
+
+        if(!$conversationID)
+        {
+            return new Response('', 204);
+        }
 
 
         $reference = $this->database->getReference('messages/'.$conversationID.'/' )->orderByChild('time');
-
         $messages = $reference->getValue();
 
-        foreach($reference as $message)
-        {
-
-        }
-
         dump($messages);
+
 
         return new Response();
 
@@ -133,9 +135,9 @@ class ChatHomeController extends AbstractController
 
 
         // -------- User Chat Data-------- //
-        $this->database->getReference('userChats/'.$loggedInUser.'/'.$contact.'/'.$conversationID.'/')
+        $this->database->getReference('userChats/'.$loggedInUser.'/'.$contact.'/')
             ->update([
-
+                'conversationID' => $conversationID,
                 'Read' => 'Boolean Value',
 
             ]);
