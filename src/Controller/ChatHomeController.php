@@ -81,10 +81,8 @@ class ChatHomeController extends AbstractController
         $reference = $this->database->getReference('messages/'.$conversationID.'/' )->orderByChild('time');
         $messages = $reference->getValue();
 
-        dump($messages);
 
-
-        return new Response();
+        return $this->json($messages);
 
     }
 
