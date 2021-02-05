@@ -136,17 +136,35 @@
         let receiver = document.getElementById('receiver');
         let chatSection = document.getElementById('chat-section');
 
+        // -----  AJAX To Load User Message FROM API EndPoint -----  //
         function loadSelectedChat(e){
 
             currentChatUserName.innerHTML = e.innerText;
             receiver = e.innerText;
             chatSection.removeAttribute("hidden");
+
+
+            $.ajax({
+                method: 'GET',
+                url: '/chat_home/new_message/' + receiver,
+                success: function(data){
+
+                    console.log(data);
+                    alert('message received');
+
+                },
+                error: function(){
+                    alert('error receiving message');
+                }
+
+            })
+
             return false;
 
         }
 
 
-        // -----  AJAX To Load User Message FROM API EndPoint -----  //
+
 
 
 
@@ -174,7 +192,6 @@
                     processData: false,
                     success: function(){
                         alert('message sent');
-                        console.log(receiver);
 
                     },
                     error: function(){

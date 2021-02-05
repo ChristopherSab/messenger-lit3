@@ -11,7 +11,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8d05e92a-e58a-43b3-acc8-f3873582ec8f" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller/ChatHomeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ChatHomeController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/chat/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/chat/index.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -255,7 +257,7 @@
       <updated>1608652914427</updated>
       <workItem from="1608652916288" duration="8605000" />
       <workItem from="1609751462189" duration="77958000" />
-      <workItem from="1610718010390" duration="201474000" />
+      <workItem from="1610718010390" duration="203931000" />
     </task>
     <servers />
   </component>
@@ -336,9 +338,9 @@
       <screen x="2048" y="0" width="1920" height="1080" />
     </state>
     <state x="2551" y="461" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.2048.1152/2048.0.1920.1080@2048.0.1920.1080" timestamp="1608726929243" />
-    <state x="2363" y="186" width="604" height="822" key="find.popup" timestamp="1612432043235">
+    <state x="2363" y="186" width="604" height="822" key="find.popup" timestamp="1612525609080">
       <screen x="2048" y="0" width="1920" height="1080" />
     </state>
-    <state x="2363" y="186" width="604" height="822" key="find.popup/0.0.2048.1152/2048.0.1920.1080@2048.0.1920.1080" timestamp="1612432043235" />
+    <state x="2363" y="186" width="604" height="822" key="find.popup/0.0.2048.1152/2048.0.1920.1080@2048.0.1920.1080" timestamp="1612525609080" />
   </component>
 </project>
