@@ -11,6 +11,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8d05e92a-e58a-43b3-acc8-f3873582ec8f" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller/ChatHomeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ChatHomeController.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -255,7 +256,7 @@
       <updated>1608652914427</updated>
       <workItem from="1608652916288" duration="8605000" />
       <workItem from="1609751462189" duration="77958000" />
-      <workItem from="1610718010390" duration="196335000" />
+      <workItem from="1610718010390" duration="200252000" />
     </task>
     <servers />
   </component>

@@ -70,9 +70,15 @@ class ChatHomeController extends AbstractController
         
         $conversationID = $this->database->getReference('/userChats/'.$loggedInUser.'/'.$contact)->getChildKeys();
 
-        $reference = $this->database->getReference('messages/'.$conversationID[2].'/' )->orderByChild('time');
+
+        $reference = $this->database->getReference('messages/'.$conversationID.'/' )->orderByChild('time');
 
         $messages = $reference->getValue();
+
+        foreach($reference as $message)
+        {
+
+        }
 
         dump($messages);
 
@@ -97,16 +103,20 @@ class ChatHomeController extends AbstractController
 
 
        // -------- Conversation Data -------- //
-       $conversation_content = [
-           'sender' => $loggedInUser,
-           'recipient' => $contact,
-       ];
 
+        $conversationReference = $this->database->getReference('conversations/');
 
-        $conversationReference = $this->database->getReference('conversations/')
-        ->push($conversation_content);
+        $conversationID = $conversationReference->getValue()['conversationID'];
 
-        $conversationID = $conversationReference->getKey();
+        if(!$conversationID)
+        {
+            $conversationID = Uuid::uuid4();
+            $conversationReference->set(["conversationID" => $conversationID]);
+
+            $this->database->getReference('conversations/')
+            ->set(["conversationID" => $conversationID]);
+
+        }
 
 
         // -------- Message Data -------- //
@@ -119,12 +129,11 @@ class ChatHomeController extends AbstractController
         ];
 
         $this->database->getReference('messages/'.$conversationID)
-            ->set($message_content);
-
+            ->push($message_content);
 
 
         // -------- User Chat Data-------- //
-        $this->database->getReference('userChats/'.$loggedInUser.'/'.$contact.'/'.$conversationID)
+        $this->database->getReference('userChats/'.$loggedInUser.'/'.$contact.'/'.$conversationID.'/')
             ->update([
 
                 'Read' => 'Boolean Value',
