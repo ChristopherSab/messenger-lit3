@@ -53,7 +53,7 @@ class ChatHomeController extends AbstractController
     public function getMessages(string $contact, EntityManagerInterface $em) : Response
     {
 
-        //Logged in user
+        //This is the current Logged in User
         $loggedInUser = $this->getUser()->getUsername();
 
         //Find User In DataBase
@@ -63,11 +63,12 @@ class ChatHomeController extends AbstractController
             'username' => $contact,
         ]);
 
-        //Check If User Exists In Database, Otherwise Return Message
+        //Check If User Exists In Database, Otherwise Erro
         if(!$user){
             return new Response('Unable To Find user', 400);
         }
-        
+
+
         $reference = $this->database->getReference('/userChats/'.$loggedInUser.'/'.$contact.'/');
 
         $conversationID = $reference->getValue()['conversationID'];
@@ -97,13 +98,13 @@ class ChatHomeController extends AbstractController
     public function postMessage(string $contact, Request $request)
     {
 
+        //This is the current Logged in User
         $loggedInUser = $this->getUser()->getUsername();
 
        $form_Message = $request->request->get('chat_form')['message'];
 
 
-       // -------- Conversation Data -------- //
-
+        // -------- Conversation Data -------- //
         $conversationReference = $this->database->getReference('userChats/'.$loggedInUser.'/'.$contact.'/');
 
         $conversationID = $conversationReference->getValue()['conversationID'];
@@ -121,11 +122,9 @@ class ChatHomeController extends AbstractController
             $this->database->getReference('conversations/'.$conversationID.'/')
             ->set(["conversationID" => $conversationID]);
 
-
         }
 
-
-        // -------- Message Data -------- //
+        // -------- Message Data ------------- //
         $message_content = [
             'sender' => $loggedInUser,
             'message' => $form_Message,
@@ -138,7 +137,7 @@ class ChatHomeController extends AbstractController
             ->push($message_content);
 
 
-        // -------- User Chat Data-------- //
+        // -------- User Chat Data ----------- //
         $this->database->getReference('userChats/'.$loggedInUser.'/'.$contact.'/')
             ->update([
                 'conversationID' => $conversationID,
