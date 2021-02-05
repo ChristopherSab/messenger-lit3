@@ -81,11 +81,10 @@ class ChatHomeController extends AbstractController
         $reference = $this->database->getReference('messages/'.$conversationID.'/' )->orderByChild('time');
         $messages = $reference->getValue();
 
-        dump($messages);
-
         return $this->json($messages);
 
     }
+
 
 
     /**
@@ -105,7 +104,7 @@ class ChatHomeController extends AbstractController
 
        // -------- Conversation Data -------- //
 
-        $conversationReference = $this->database->getReference('conversations/');
+        $conversationReference = $this->database->getReference('userChats/'.$loggedInUser.'/'.$contact.'/');
 
         $conversationID = $conversationReference->getValue()['conversationID'];
 
@@ -114,15 +113,21 @@ class ChatHomeController extends AbstractController
             $conversationID = Uuid::uuid4();
             $conversationReference->set(["conversationID" => $conversationID]);
 
-            $this->database->getReference('conversations/')
+            $conversationReference2 = $this->database->getReference('userChats/'.$contact.'/'.$loggedInUser.'/');
+
+            $conversationReference2->set(["conversationID" => $conversationID]);
+
+
+            $this->database->getReference('conversations/'.$conversationID.'/')
             ->set(["conversationID" => $conversationID]);
+
 
         }
 
 
         // -------- Message Data -------- //
         $message_content = [
-            'recipient' => $contact,
+            'sender' => $loggedInUser,
             'message' => $form_Message,
             'time' => Database::SERVER_TIMESTAMP,
             'email_sent' => 'Boolean',
