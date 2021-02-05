@@ -1,0 +1,117 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+{% endblock %}
+
+
+{% block body %}
+
+    <nav class=" navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            {% if app.user %}
+                <a class="navbar-brand" href="#">Welcome {{ app.user.username  }}</a>
+                <div id="user" style="display: none;">{{ app.user.username }}</div>
+                <div id="receiver" style="display: none;"></div>
+            {% endif %}
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    {% if app.user %}
+                        <a class="nav-link href="{{ path('app_logout') }}">Logout</a>
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+    </nav>
+
+    <main class="content">
+        <div class="container p-0">
+
+            <h1 class="h3 mb-3">Messages</h1>
+
+            <div class="card">
+                <div class="row g-0">
+                    <div class="col-12 col-lg-5 col-xl-3 border-right">
+
+                        <div class="px-4 d-none d-md-block">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1">
+                                    <input type="text" class="form-control my-3" placeholder="Search...">
+                                </div>
+                            </div>
+                        </div>
+
+                        {% for user in users %}
+                            {% if user.username != app.user.username %}
+                                <a id="contact-profile"  onclick="loadSelectedChat(this)"  class="list-group-item list-group-item-action border-0" >
+                                    <div class="d-flex align-items-start">
+                                        <img src="https://www.flaticon.com/svg/vstatic/svg/1077/1077114.svg?token=exp=1612168654~hmac=80ce6f80ba92ee41166afb99a26ca255" class="rounded-circle mr-1" alt="Sharon Lessman" width="40" height="40">
+                                        <div  id="contactName" class="flex-grow-1 ml-3">
+
+                                            {{ user.username }}
+
+                                        </div>
+                                    </div>
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+    <script>
+
+        let currentChatUserName = document.getElementById('currentChatUserName');
+        let receiver = document.getElementById('receiver');
+
+        function loadSelectedChat(e){
+
+            currentChatUserName.innerHTML = e.innerText;
+            receiver = e.innerText;
+
+            return false;
+
+        }
+
+        $(function () {
+
+            let user = $('#user');
+
+            $('#form-submit').on('click', function() {
+
+                let formElement = $('#form');
+                let formData = new FormData(formElement[0]);
+
+                e.preventDefault();
+                $.ajax({
+                    type: 'POST',
+                    url: '/chat_session/'+'{'+user+'}',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function() {
+                        alert('message sent');
+                    },
+                    error: function(){
+                        alert('error sending message');
+                    }
+
+                })
+
+            });
+
+        });
+    </script>
+
+
+{% endblock %}

@@ -11,13 +11,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8d05e92a-e58a-43b3-acc8-f3873582ec8f" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/assets/js/testFileDelete.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Controller/MessageController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Form/ChatFormType.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Controller/DashBoardController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/dashboard/dashboard.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/chat_messaging.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/chat_messaging.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller/ChatHomeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ChatHomeController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/base.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/symfony.lock" beforeDir="false" afterPath="$PROJECT_DIR$/symfony.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/chat/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/chat/index.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -178,10 +180,7 @@
       <path value="$PROJECT_DIR$/vendor/friends-of-behat/mink" />
       <path value="$PROJECT_DIR$/vendor/friends-of-behat/mink-browserkit-driver" />
       <path value="$PROJECT_DIR$/vendor/friends-of-behat/mink-extension" />
-      <path value="$PROJECT_DIR$/vendor/ocramius/proxy-manager" />
       <path value="$PROJECT_DIR$/vendor/fabpot/goutte" />
-      <path value="$PROJECT_DIR$/vendor/zendframework/zend-eventmanager" />
-      <path value="$PROJECT_DIR$/vendor/zendframework/zend-code" />
       <path value="$PROJECT_DIR$/vendor/behat/mink-goutte-driver" />
       <path value="$PROJECT_DIR$/vendor/myclabs/deep-copy" />
       <path value="$PROJECT_DIR$/vendor/phar-io/version" />
@@ -214,6 +213,13 @@
       <path value="$PROJECT_DIR$/vendor/liip/functional-test-bundle" />
       <path value="$PROJECT_DIR$/vendor/zenstruck/callback" />
       <path value="$PROJECT_DIR$/vendor/symfony/webpack-encore-bundle" />
+      <path value="$PROJECT_DIR$/vendor/friendsofphp/proxy-manager-lts" />
+      <path value="$PROJECT_DIR$/vendor/laminas/laminas-code" />
+      <path value="$PROJECT_DIR$/vendor/laminas/laminas-zendframework-bridge" />
+      <path value="$PROJECT_DIR$/vendor/laminas/laminas-eventmanager" />
+      <path value="$PROJECT_DIR$/vendor/ramsey/uuid" />
+      <path value="$PROJECT_DIR$/vendor/brick/math" />
+      <path value="$PROJECT_DIR$/vendor/ramsey/collection" />
     </include_path>
   </component>
   <component name="ProjectId" id="1m1Etpm1I27DgCh6yyDL5fuKwdt" />
@@ -258,7 +264,7 @@
       <updated>1608652914427</updated>
       <workItem from="1608652916288" duration="8605000" />
       <workItem from="1609751462189" duration="77958000" />
-      <workItem from="1610718010390" duration="148092000" />
+      <workItem from="1610718010390" duration="196028000" />
     </task>
     <servers />
   </component>
@@ -286,14 +292,18 @@
       <screen x="2048" y="0" width="1920" height="1080" />
     </state>
     <state x="2348" y="112" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.2048.1152/2048.0.1920.1080@2048.0.1920.1080" timestamp="1612269529853" />
-    <state x="2378" y="302" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1612274338013">
+    <state x="2378" y="302" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1612278039356">
       <screen x="2048" y="0" width="1920" height="1080" />
     </state>
-    <state x="2378" y="302" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.2048.1152/2048.0.1920.1080@2048.0.1920.1080" timestamp="1612274338013" />
+    <state x="2378" y="302" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.2048.1152/2048.0.1920.1080@2048.0.1920.1080" timestamp="1612278039356" />
     <state width="254" height="195" key="DatabaseViewActions_Filter" timestamp="1610022827899">
       <screen x="2048" y="0" width="1920" height="1080" />
     </state>
     <state width="254" height="195" key="DatabaseViewActions_Filter/0.0.2048.1152/2048.0.1920.1080@2048.0.1920.1080" timestamp="1610022827899" />
+    <state x="2048" y="0" width="1920" height="1080" key="FileDocumentManager.FileCacheConflict" timestamp="1612278275416">
+      <screen x="2048" y="0" width="1920" height="1080" />
+    </state>
+    <state x="2048" y="0" width="1920" height="1080" key="FileDocumentManager.FileCacheConflict/0.0.2048.1152/2048.0.1920.1080@2048.0.1920.1080" timestamp="1612278275416" />
     <state width="794" height="214" key="GridCell.Tab.0.bottom" timestamp="1610033019132">
       <screen x="2048" y="0" width="1920" height="1080" />
     </state>
@@ -314,10 +324,10 @@
       <screen x="2048" y="0" width="1920" height="1080" />
     </state>
     <state x="2311" y="282" key="IDE.errors.dialog/0.0.2048.1152/2048.0.1920.1080@2048.0.1920.1080" timestamp="1610722540304" />
-    <state x="2451" y="520" key="NewPhpClassDialog" timestamp="1612265274106">
+    <state x="2451" y="520" key="NewPhpClassDialog" timestamp="1612277999694">
       <screen x="2048" y="0" width="1920" height="1080" />
     </state>
-    <state x="2451" y="520" key="NewPhpClassDialog/0.0.2048.1152/2048.0.1920.1080@2048.0.1920.1080" timestamp="1612265274106" />
+    <state x="2451" y="520" key="NewPhpClassDialog/0.0.2048.1152/2048.0.1920.1080@2048.0.1920.1080" timestamp="1612277999694" />
     <state x="2573" y="470" key="NewPhpFileDialog" timestamp="1609859563598">
       <screen x="2048" y="0" width="1920" height="1080" />
     </state>
@@ -335,9 +345,9 @@
       <screen x="2048" y="0" width="1920" height="1080" />
     </state>
     <state x="2551" y="461" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.2048.1152/2048.0.1920.1080@2048.0.1920.1080" timestamp="1608726929243" />
-    <state x="2363" y="186" width="604" height="822" key="find.popup" timestamp="1611072867781">
+    <state x="2363" y="186" width="604" height="822" key="find.popup" timestamp="1612432043235">
       <screen x="2048" y="0" width="1920" height="1080" />
     </state>
-    <state x="2363" y="186" width="604" height="822" key="find.popup/0.0.2048.1152/2048.0.1920.1080@2048.0.1920.1080" timestamp="1611072867781" />
+    <state x="2363" y="186" width="604" height="822" key="find.popup/0.0.2048.1152/2048.0.1920.1080@2048.0.1920.1080" timestamp="1612432043235" />
   </component>
 </project>
