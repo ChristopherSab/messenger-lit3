@@ -88,26 +88,27 @@ class ChatHomeController extends AbstractController
         $messages = $reference->getValue();
 
 
-        // -------- Loop Through All The Conversation Messages, If attachment/s exist to create a downloadable link -------- //
-        foreach ($messages as &$messageId) {
 
+        // -------- Loop Through All The Conversation Messages, If attachment/s exist to create a downloadable link -------- //
+
+       if($messages) {
+
+        foreach ($messages as $messagesKey => $messageId ) {
 
             if (array_key_exists('attachments', $messageId)) {
 
-
                 foreach ($messageId['attachments'] as $key => $fileId) {
 
-
-                    $messageId['attachments'][$key]['signedUrl'] = '';
+                    $messages[$messagesKey]['attachments'][$key]['signedUrl'] = "";
 
                     $disposition = HeaderUtils::makeDisposition('attachment', $fileId['originalFileName']);
 
-                    $messageId['attachments'][$key]['signedUrl'] = $this->storage->getBucket()->object('Attachments/'.$conversationID.'/'.$messageId['messageId'].'/'.$key)
-
-
+                    $messages[$messagesKey]['attachments'][$key]['signedUrl'] = $this->storage->getBucket()->object('Attachments/'.$conversationID.'/'.$messageId['messageId'].'/'.$key)
                         ->signedUrl(time() + 3600, [
                             'responseDisposition' => $disposition
                         ]);
+
+                    }
 
                 }
 
@@ -171,8 +172,7 @@ class ChatHomeController extends AbstractController
             'message' => $form_Message,
             'time' => Database::SERVER_TIMESTAMP,
             'email_sent' => 'Boolean',
-            'read' => 'Boolean',
-            //'attachments' => []
+            'read' => 'false'
         ];
 
 
@@ -186,7 +186,6 @@ class ChatHomeController extends AbstractController
         if($attachments){
 
             foreach($attachments as $file){
-
 
                 $fileId = Uuid::uuid4();
 
@@ -213,7 +212,7 @@ class ChatHomeController extends AbstractController
         $this->database->getReference('userChats/'.$loggedInUser.'/'.$contact.'/')
             ->update([
                 'conversationID' => $conversationID,
-                'Read' => 'Boolean Value'
+                'Read/Unread' => 'Unread'
             ]);
 
         return new Response();
