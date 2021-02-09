@@ -91,6 +91,9 @@
                                 <div id ="new-message" class="chat-message-right pb-4">
 
                                 </div>
+                                <div id ="new-attachment" class="chat-message-right pb-4">
+
+                                </div>
 
                                 <div class="chat-message-left pb-4">
 
@@ -104,7 +107,7 @@
                         {# ------ Send Messages ----   #}
                         <div class="flex-grow-0 py-3 px-4 border-top">
                             {{ form_start(chatForm, {attr: {id: "form"}}) }}
-                                {{ form_row(chatForm.image) }}
+                                {{ form_row(chatForm.attachment) }}
                                 {{ form_row(chatForm.message) }}
                                 <button id="form-submit" type="button" class="btn btn-primary">Send Message</button>
                             {{ form_end(chatForm) }}
@@ -122,6 +125,7 @@
         //let receiver = document.getElementById('receiver');
         let chatSection = document.getElementById('chat-section');
         let newMessageArea = document.getElementById('new-message');
+        let newAttachmentArea = document.getElementById('new-attachment');
 
 
         // -----  AJAX To Load User Messages FROM API EndPoint -----  //
@@ -162,14 +166,46 @@
             })
         }
 
+    /*    function displayAttachment(data){
+
+            //let attachmentDownloadLink = ''
+
+
+            for(let key in data){
+
+                if(data[key]['attachments']){
+
+
+                    for( let attachmentKey in data[key]['attachments']){
+
+                        return  "<a href='"+data[key]['attachments'][attachmentKey]['signedUrl']+"'>Download: "+data[key]['attachments'][attachmentKey]['originalFileName'] +" </a>";
+
+                        //console.log(attachmentDownloadLink);
+
+
+                    }
+
+            }
+
+            //newAttachmentArea.innerHTML = attachmentDownloadLink;
+
+        }
+
+
+     */
+
 
         function displayMessages(data){
+
 
             let message = '';
 
             for(let key in data)
             {
-                //console.log(data[key]['message']);
+
+
+                //If attachments exits, Send Message HTML with Attachment HTML
+                if(data[key]['attachments']){
 
                  message += '  <div>\n' +
                     '        <img src="https://www.flaticon.com/svg/vstatic/svg/1077/1077114.svg?token=exp=1612168654~hmac=80ce6f80ba92ee41166afb99a26ca255" class="rounded-circle mr-1" width="40" height="40">\n' +
@@ -180,13 +216,25 @@
                     '        ' + data[key]['message'] + '\n' +
                     '        </div>';
 
-                console.log(message);
+                    for( let attachmentKey in data[key]['attachments']){
 
-                //setInterval(function(){ newMessageArea.innerHTML += message; }, 5000);
+                        message +=  "<a href='"+data[key]['attachments'][attachmentKey]['signedUrl']+"'>Download: "+data[key]['attachments'][attachmentKey]['originalFileName'] +" </a>";
+                    }
 
-                //setInterval(function(){ console.log(data[key]['message']); }, 5000);
 
+                 }else{
 
+                    message += '  <div>\n' +
+                        '        <img src="https://www.flaticon.com/svg/vstatic/svg/1077/1077114.svg?token=exp=1612168654~hmac=80ce6f80ba92ee41166afb99a26ca255" class="rounded-circle mr-1" width="40" height="40">\n' +
+                        '            <div class="text-muted small text-nowrap mt-2">2:33 am</div>\n' +
+                        '        </div>\n' +
+                        '        <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">\n' +
+                        '            <div class="font-weight-bold mb-1">' + data[key]['sender'] + '</div>\n' +
+                        '        ' + data[key]['message'] + '\n' +
+                        '        </div>';
+
+                    console.log('no attachments');
+                }
 
             }
 
@@ -198,7 +246,6 @@
 
         // ----- AJAX To POST User Message TO API EndPoint -----  //
         $(function () {
-
 
             $(document).on('click', '#form-submit', function(e) {
 
@@ -217,7 +264,8 @@
                     contentType: false,
                     processData: false,
                     success: function(){
-                        alert('message sent');
+                        //alert('message sent');
+                        console.log('message sent');
 
                     },
                     error: function(){

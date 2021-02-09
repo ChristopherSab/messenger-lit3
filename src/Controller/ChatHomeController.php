@@ -7,6 +7,10 @@ use App\Entity\User;
 use App\Form\ChatFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Kreait\Firebase\Database;
+use Kreait\Firebase\Storage;
+use Kreait\Firebase\Messaging;
+use Symfony\Component\HttpFoundation\HeaderUtils;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Ramsey\Uuid\Uuid;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,9 +23,12 @@ class ChatHomeController extends AbstractController
 
     private $database;
 
-    public function __construct(Database $database)
+    private $storage;
+
+    public function __construct(Database $database, Storage $storage)
     {
         $this->database = $database;
+        $this->storage = $storage;
     }
 
 
@@ -63,11 +70,10 @@ class ChatHomeController extends AbstractController
             'username' => $contact,
         ]);
 
-        //Check If User Exists In Database, Otherwise Erro
+        //Check If User Exists In Database
         if(!$user){
             return new Response('Unable To Find user', 400);
         }
-
 
         $reference = $this->database->getReference('/userChats/'.$loggedInUser.'/'.$contact.'/');
 
@@ -78,15 +84,41 @@ class ChatHomeController extends AbstractController
             return new Response('', 204);
         }
 
-
         $reference = $this->database->getReference('messages/'.$conversationID.'/' )->orderByChild('time');
         $messages = $reference->getValue();
+
+
+        // -------- Loop Through All The Conversation Messages, If attachment/s exist to create a downloadable link -------- //
+        foreach ($messages as &$messageId) {
+
+
+            if (array_key_exists('attachments', $messageId)) {
+
+
+                foreach ($messageId['attachments'] as $key => $fileId) {
+
+
+                    $messageId['attachments'][$key]['signedUrl'] = '';
+
+                    $disposition = HeaderUtils::makeDisposition('attachment', $fileId['originalFileName']);
+
+                    $messageId['attachments'][$key]['signedUrl'] = $this->storage->getBucket()->object('Attachments/'.$conversationID.'/'.$messageId['messageId'].'/'.$key)
+
+
+                        ->signedUrl(time() + 3600, [
+                            'responseDisposition' => $disposition
+                        ]);
+
+                }
+
+            }
+
+        }
+
 
         return $this->json($messages);
 
     }
-
-
 
     /**
      *
@@ -102,6 +134,10 @@ class ChatHomeController extends AbstractController
         $loggedInUser = $this->getUser()->getUsername();
 
        $form_Message = $request->request->get('chat_form')['message'];
+
+       if($form_Message === ''){
+           return new Response('You Cannot Send An Empty Message', 204);
+       }
 
 
         // -------- Conversation Data -------- //
@@ -124,30 +160,66 @@ class ChatHomeController extends AbstractController
 
         }
 
+
         // -------- Message Data ------------- //
+
+        $messageId = Uuid::uuid4();
+
         $message_content = [
+            'messageId' => $messageId,
             'sender' => $loggedInUser,
             'message' => $form_Message,
             'time' => Database::SERVER_TIMESTAMP,
             'email_sent' => 'Boolean',
             'read' => 'Boolean',
+            //'attachments' => []
         ];
 
-        $this->database->getReference('messages/'.$conversationID)
-            ->push($message_content);
+
+        // -------- Attachments Data -------- //
+        /** @var UploadedFile[] $attachments */
+        $attachments = $request->files->get('chat_form')['attachment'];
+
+        $storageBucket = $this->storage->getBucket();
+
+
+        if($attachments){
+
+            foreach($attachments as $file){
+
+
+                $fileId = Uuid::uuid4();
+
+                $storageBucket->upload(file_get_contents($file->getPathname()), [
+                    'name' => 'Attachments/'.$conversationID.'/'.$messageId.'/'.$fileId
+                ]);
+
+                $fileData = [
+                    'originalFileName' => $file->getClientOriginalName(),
+                    'fileType' => $file->getMimeType()
+
+                ];
+
+                $message_content['attachments'][$fileId->toString()] = $fileData;
+
+            }
+        }
+
+        $this->database->getReference('messages/'.$conversationID.'/'.$messageId)
+            ->set($message_content);
 
 
         // -------- User Chat Data ----------- //
         $this->database->getReference('userChats/'.$loggedInUser.'/'.$contact.'/')
             ->update([
                 'conversationID' => $conversationID,
-                'Read' => 'Boolean Value',
-
+                'Read' => 'Boolean Value'
             ]);
 
         return new Response();
 
     }
+
 
 
 }

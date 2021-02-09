@@ -26,8 +26,9 @@ class ChatFormType extends AbstractType
             ]])
 
 
-            ->add('image', FileType::class, ['label' => 'Upload File>>>', 'mapped' => false,
+            ->add('attachment', FileType::class, ['label' => 'Upload File>>>', 'mapped' => false,
                 'required' => false,
+                'multiple' => true
             ]);
     }
 
