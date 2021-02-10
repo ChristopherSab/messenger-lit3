@@ -61,7 +61,7 @@
 
                                 </div>
                              </a>
-                                 <div hidden id="unread-messages" style="color:#ff0000;"> >> &#9993; << new messages</div>
+                                 <div hidden id="unread-messages" style="color:#ff0000;"> &#8679; &#9993; &#8679; new messages</div>
 
                         {% endif  %}
                         {% endfor %}
@@ -125,7 +125,6 @@
     <script>
 
         let currentChatUserName = document.getElementById('currentChatUserName');
-        //let receiver = document.getElementById('receiver');
         let chatSection = document.getElementById('chat-section');
         let newMessageArea = document.getElementById('new-message');
         let newAttachmentArea = document.getElementById('new-attachment');
@@ -147,13 +146,9 @@
 
                         displayUnreadMessages(data);
 
-                        //alert('Ajax Requests Successful');
-
                     },
                     error: function(){
-
                         alert('error receiving data');
-
                     }
                 })
 
@@ -165,7 +160,6 @@
 
             let usersWithUnreadMessages = [];
 
-
             for(let key in data){
 
                 if(data[key]['read'] === 'false'){
@@ -175,7 +169,6 @@
                 }
 
             }
-
 
             for(let i = 0; i < contacts.length; i++) {
 
@@ -202,7 +195,7 @@
             chatSection.removeAttribute("hidden");
             getMessagesFromDatabase();
 
-            setInterval( ()=> getMessagesFromDatabase() , 5000);
+            //setInterval( ()=> getMessagesFromDatabase() , 2000);
 
             return false;
 
@@ -213,7 +206,6 @@
             console.log('getting message');
 
             let receiverTemp = currentChatUserName.innerText;
-
 
             $.ajax({
                 method: 'GET',
@@ -234,42 +226,39 @@
 
         function displayMessages(data){
 
-
             let message = '';
 
             for(let key in data)
             {
 
+                const time = new Date(data[key]['time']).toLocaleTimeString();
+                const date = new Date(data[key]['time']).toLocaleDateString();
 
                 //If attachments exits, Send Message HTML with Attachment HTML
                 if(data[key]['attachments']){
 
                  message += '  <div>\n' +
-                    '            <div class="text-muted small text-nowrap mt-2">2:33 am</div>\n' +
                     '        </div>\n' +
                     '        <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">\n' +
                     '            <div class="font-weight-bold mb-1">' + data[key]['sender'] + '</div>\n' +
                     '        ' + data[key]['message'] + '\n' +
+                     '          <div class="text-muted small text-nowrap mt-2">' + time + '</div>\n' +
                     '        </div>';
 
                     for( let attachmentKey in data[key]['attachments']){
 
-                        console.log(data[key]['attachments']);
-
                         message +=  "<a href='"+data[key]['attachments'][attachmentKey]['signedUrl']+"'>Download: "+data[key]['attachments'][attachmentKey]['originalFileName'] +" </a>";
-
-                        console.log(data[key]['attachments'][attachmentKey]['signedUrl']);
                     }
 
 
                  }else{
 
                     message += '  <div>\n' +
-                        '            <div class="text-muted small text-nowrap mt-2">2:33 am</div>\n' +
                         '        </div>\n' +
                         '        <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">\n' +
                         '            <div class="font-weight-bold mb-1">' + data[key]['sender'] + '</div>\n' +
                         '        ' + data[key]['message'] + '\n' +
+                        '         <div class="text-muted small text-nowrap mt-2">' + time + '</div>\n' +
                         '        </div>';
 
                 }
@@ -302,6 +291,10 @@
                     success: function(){
                         //alert('message sent');
                         console.log('message sent');
+
+                        $('#chat_form_message').val('');
+
+                        $('#chat_form_attachment').val('');
 
                     },
                     error: function(){
