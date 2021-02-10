@@ -88,13 +88,24 @@ class ChatHomeController extends AbstractController
         $messages = $reference->getValue();
 
 
-
-        // -------- Loop Through All The Conversation Messages, If attachment/s exist to create a downloadable link -------- //
-
        if($messages) {
 
         foreach ($messages as $messagesKey => $messageId ) {
 
+            //dump($messages[$messagesKey]);
+
+
+            // - If a user makes a get request to receive messages, it changes their r -//
+            if($messages[$messagesKey]['read'] === 'false' && $messages[$messagesKey]['sender'] === $contact){
+
+                $reference3 = $this->database->getReference('messages/'.$conversationID.'/'.$messagesKey);
+
+                $reference3->update(['read' => 'true']);
+
+            }
+
+
+            // - Loop Through All The Conversation Messages, If attachment/s exist to create a downloadable link - //
             if (array_key_exists('attachments', $messageId)) {
 
                 foreach ($messageId['attachments'] as $key => $fileId) {
@@ -116,10 +127,57 @@ class ChatHomeController extends AbstractController
 
         }
 
+        return $this->json($messages);
+    }
+
+
+
+    ////////////////////////////////////////////////
+    /**
+     *
+     * @Route("/chat_home/check_if_unread_messages/{contact}", name="get_unread_messages", methods="GET")
+     * @IsGranted("ROLE_USER")
+     * @param string $contact
+     */
+    public function getUnReadMessages(string $contact, EntityManagerInterface $em) : Response
+    {
+
+        //This is the current Logged in User
+        $loggedInUser = $this->getUser()->getUsername();
+
+        //Find User In DataBase
+        $Repository = $em->getRepository(User::class);
+
+        $user = $Repository->findOneBy([
+            'username' => $contact,
+        ]);
+
+        //Check If User Exists In Database
+        if(!$user){
+            return new Response('Unable To Find user', 400);
+        }
+
+        $reference = $this->database->getReference('/userChats/'.$loggedInUser.'/'.$contact.'/');
+
+        $conversationID = $reference->getValue()['conversationID'];
+
+        if(!$conversationID)
+        {
+            return new Response('', 204);
+        }
+
+        $reference = $this->database->getReference('messages/'.$conversationID.'/' )->orderByChild('time');
+        $messages = $reference->getValue();
 
         return $this->json($messages);
 
     }
+
+
+    //////////////////////
+
+
+
 
     /**
      *
@@ -169,9 +227,10 @@ class ChatHomeController extends AbstractController
         $message_content = [
             'messageId' => $messageId,
             'sender' => $loggedInUser,
+            'receiver' => $contact,
             'message' => $form_Message,
             'time' => Database::SERVER_TIMESTAMP,
-            'email_sent' => 'Boolean',
+            'email_sent' => 'false',
             'read' => 'false'
         ];
 
@@ -212,7 +271,7 @@ class ChatHomeController extends AbstractController
         $this->database->getReference('userChats/'.$loggedInUser.'/'.$contact.'/')
             ->update([
                 'conversationID' => $conversationID,
-                'Read/Unread' => 'Unread'
+                'read' => 'false'
             ]);
 
         return new Response();

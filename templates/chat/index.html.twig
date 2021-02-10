@@ -50,16 +50,19 @@
 
                         {% for user in users %}
                              {%  if user.username != app.user.username %}
-                             <a id="contact-profile"  onclick="loadSelectedChat(this)"  class="list-group-item list-group-item-action border-0" >
+                             <a id="contact-profile"  onclick="loadSelectedChat(this)"  class="contact-profile list-group-item list-group-item-action border-0" >
                                 <div class="d-flex align-items-start">
                                     <img src="https://www.flaticon.com/svg/vstatic/svg/1077/1077114.svg?token=exp=1612168654~hmac=80ce6f80ba92ee41166afb99a26ca255" class="rounded-circle mr-1"  width="40" height="40">
-                                    <div  id="contactName" class="flex-grow-1 ml-3">
+                                    <div class="contactName" id="contactName" class="flex-grow-1 ml-3">
 
                                         {{ user.username }}
 
                                     </div>
+
                                 </div>
                              </a>
+                                 <div hidden id="unread-messages" style="color:#ff0000;"> >> &#9993; << new messages</div>
+
                         {% endif  %}
                         {% endfor %}
 
@@ -77,11 +80,11 @@
                                 <div id="currentChatUserName"  class="flex-grow-1 pl-3">
 
 
-
                                 </div>
                                 {# ------ Other User ----   <strong id="currentChatUserName"></strong> #}
 
                             </div>
+
                         </div>
 
                         {# ------ Chat Messages ----   #}
@@ -126,24 +129,86 @@
         let chatSection = document.getElementById('chat-section');
         let newMessageArea = document.getElementById('new-message');
         let newAttachmentArea = document.getElementById('new-attachment');
+        let contacts = document.getElementsByClassName('contactName');
+        let UnreadMessagesArea = document.getElementById('unread-messages');
+        let contactProfile = document.getElementsByClassName('contact-profile');
+
+        // -----  AJAX To Load Unread Messages For Each Contact -----  //
+        window.onload = function() {
+
+            for(let i = 0; i < contacts.length; i++){
+
+                console.log(contacts[i].innerText);
+
+                $.ajax({
+                    method: 'GET',
+                    url: '/chat_home/check_if_unread_messages/' + contacts[i].innerText,
+                    success: function(data){
+
+                        displayUnreadMessages(data);
+
+                        //alert('Ajax Requests Successful');
+
+                    },
+                    error: function(){
+
+                        alert('error receiving data');
+
+                    }
+                })
+
+            }
+
+        };
+
+        function displayUnreadMessages(data){
+
+            let usersWithUnreadMessages = [];
 
 
+            for(let key in data){
+
+                if(data[key]['read'] === 'false'){
+
+
+                    usersWithUnreadMessages.push(data[key]['sender']);
+                }
+
+            }
+
+
+            for(let i = 0; i < contacts.length; i++) {
+
+                if (usersWithUnreadMessages.includes(contacts[i].innerText)) {
+
+
+                    contactProfile[i].nextElementSibling.removeAttribute("hidden");
+
+                    console.log(contactProfile[i].nextElementSibling);
+
+                }
+
+            }
+
+        }
+        
         // -----  AJAX To Load User Messages FROM API EndPoint -----  //
         function loadSelectedChat(e){
+
+           e.nextElementSibling.style.display = "none";
 
             currentChatUserName.innerHTML = e.innerText;
             //receiver = e.innerText;
             chatSection.removeAttribute("hidden");
-            someFunction();
+            getMessagesFromDatabase();
 
-            setInterval( ()=> someFunction() , 5000);
+            setInterval( ()=> getMessagesFromDatabase() , 5000);
 
             return false;
 
         }
 
-
-        function someFunction(){
+        function getMessagesFromDatabase(){
 
             console.log('getting message');
 
@@ -195,7 +260,6 @@
 
                         console.log(data[key]['attachments'][attachmentKey]['signedUrl']);
                     }
-
 
 
                  }else{
