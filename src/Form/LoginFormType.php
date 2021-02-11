@@ -28,6 +28,10 @@ class LoginFormType extends AbstractType
                     new NotBlank(
                         array('message' => 'Please Enter A Valid Username.')
                     )
+                ],
+                'attr' => [
+                    'class' => 'form-control',
+                    'id' => 'username'
                 ]
             ])
             ->add('password', PasswordType::class, [
@@ -35,11 +39,15 @@ class LoginFormType extends AbstractType
                 'required' => false,
                 'constraints' => [
                     new NotBlank()
+                ],
+                'attr' => [
+                    'class' => 'form-control',
+                    'id' => 'password'
                 ]
             ])
             ->add('login', SubmitType::class, [
                 'attr' => [
-                    'class' => 'btn btn-info'
+                    'class' => 'btn btn-lg btn-info btn-block'
                 ]
             ]);
         ;

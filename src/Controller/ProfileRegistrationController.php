@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Entity\Profile;
 use App\Form\ProfileFormType;
+use App\Security\LoginFormAuthenticator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;

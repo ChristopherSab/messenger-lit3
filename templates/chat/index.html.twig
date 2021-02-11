@@ -23,7 +23,7 @@
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
                     {% if app.user %}
-                    <a class="nav-link href="{{ path('app_logout') }}">Logout</a>
+                    <a class="nav-link" href="{{ path('app_logout') }}">Logout</a>
                     {% endif %}
                 </div>
 
@@ -48,11 +48,12 @@
                             </div>
                         </div>
 
+
                         {% for user in users %}
                              {%  if user.username != app.user.username %}
                              <a id="contact-profile"  onclick="loadSelectedChat(this)"  class="contact-profile list-group-item list-group-item-action border-0" >
                                 <div class="d-flex align-items-start">
-                                    <img src="https://www.flaticon.com/svg/vstatic/svg/1077/1077114.svg?token=exp=1612168654~hmac=80ce6f80ba92ee41166afb99a26ca255" class="rounded-circle mr-1"  width="40" height="40">
+                                    <img src="https://img.icons8.com/ultraviolet/90/000000/gender-neutral-user.png" class="rounded-circle mr-1"  width="40" height="40">
                                     <div class="contactName" id="contactName" class="flex-grow-1 ml-3">
 
                                         {{ user.username }}
@@ -61,7 +62,7 @@
 
                                 </div>
                              </a>
-                                 <div hidden id="unread-messages" style="color:#ff0000;"> &#8679; &#9993; &#8679; new messages</div>
+                                 <div hidden id="unread-messages"> &#8679; &#9993; &#8679; new messages</div>
 
                         {% endif  %}
                         {% endfor %}
@@ -69,11 +70,11 @@
 
                         <hr class="d-block d-lg-none mt-1 mb-0">
                     </div>
-                    <div hidden id="chat-section" class="col-12 col-lg-7 col-xl-9">
+                    <div hidden id="chat-section" class="col-12 col-lg-7 col-xl-3">
                         <div class="py-2 px-4 border-bottom d-none d-lg-block">
                             <div class="d-flex align-items-center py-1">
                                 <div class="position-relative">
-                                    <img src="https://www.flaticon.com/svg/vstatic/svg/1077/1077114.svg?token=exp=1612168654~hmac=80ce6f80ba92ee41166afb99a26ca255" class="rounded-circle mr-1" width="40" height="40">
+                                    <img src="https://img.icons8.com/ultraviolet/90/000000/gender-neutral-user.png" class="rounded-circle mr-1" width="40" height="40">
                                 </div>
 
                                 {# ------ Other User ----   #}
@@ -131,14 +132,14 @@
         let contacts = document.getElementsByClassName('contactName');
         let UnreadMessagesArea = document.getElementById('unread-messages');
         let contactProfile = document.getElementsByClassName('contact-profile');
+        let loggedInUser = document.getElementById('user');
 
         // -----  AJAX To Load Unread Messages For Each Contact -----  //
+
+       /*
         window.onload = function() {
 
             for(let i = 0; i < contacts.length; i++){
-
-                console.log(contacts[i].innerText);
-
                 $.ajax({
                     method: 'GET',
                     url: '/chat_home/check_if_unread_messages/' + contacts[i].innerText,
@@ -146,29 +147,83 @@
 
                         displayUnreadMessages(data);
 
+                       // setInterval( ()=> displayUnreadMessages(data) , 10000);
+
+                        //console.log('checking for unread messages');
+                        //setInterval( ()=> console.log('checking for unread messages') , 10000);
+
                     },
                     error: function(){
                         alert('error receiving data');
-                    }
+                    },
+
                 })
 
             }
 
         };
 
+        */
+
+
+        setInterval( ()=>
+
+                $.ajax({
+                    method: 'GET',
+                    url: '/chat_home/check_if_unread_messages/' + loggedInUser.innerText,
+                    success: function(data){
+
+                        displayUnreadMessages(data);
+
+
+                        //setInterval( (data)=> displayUnreadMessages(data) , 3000);
+
+                        //setInterval( ()=> displayUnreadMessages(data) , 3000);
+
+
+                        //console.log('checking for unread messages');
+                        //setInterval( ()=> console.log('checking for unread messages') , 3000);
+
+                    },
+                    error: function(){
+                        alert('error receiving data');
+                    },
+
+                })
+
+
+
+             , 3000);
+
+
+
+        ///
+
+        //setInterval( (data)=> displayUnreadMessages(data) , 3000);
+
+
+
+
         function displayUnreadMessages(data){
+
+
+           // console.log('this is the data' + data);
+
 
             let usersWithUnreadMessages = [];
 
+
             for(let key in data){
+
 
                 if(data[key]['read'] === 'false'){
 
-
-                    usersWithUnreadMessages.push(data[key]['sender']);
+                   // console.log(data[key]['receiver']);
+                    usersWithUnreadMessages.push(data[key]['receiver']);
                 }
 
             }
+
 
             for(let i = 0; i < contacts.length; i++) {
 
@@ -177,13 +232,15 @@
 
                     contactProfile[i].nextElementSibling.removeAttribute("hidden");
 
-                    console.log(contactProfile[i].nextElementSibling);
+                    //console.log(contactProfile[i].nextElementSibling);
 
                 }
 
             }
 
+
         }
+
         
         // -----  AJAX To Load User Messages FROM API EndPoint -----  //
         function loadSelectedChat(e){
@@ -195,7 +252,7 @@
             chatSection.removeAttribute("hidden");
             getMessagesFromDatabase();
 
-            //setInterval( ()=> getMessagesFromDatabase() , 2000);
+            setInterval( ()=> getMessagesFromDatabase() , 2000);
 
             return false;
 
@@ -203,7 +260,7 @@
 
         function getMessagesFromDatabase(){
 
-            console.log('getting message');
+            //console.log('getting message');
 
             let receiverTemp = currentChatUserName.innerText;
 
@@ -214,7 +271,6 @@
 
                     displayMessages(data);
                     //alert('message received');
-                    //setInterval(function(){ alert("Hello"); }, 5000);
 
                 },
                 error: function(){

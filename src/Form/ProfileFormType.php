@@ -19,14 +19,22 @@ class ProfileFormType extends AbstractType
     {
         $builder
             ->add('bio', TextareaType::class, [
-                'label' => 'bio'
+                'label' => 'bio',
+                'attr' => [
+                    'class' => 'form-control'
+
+                ]
             ])
             ->add('city', TextType::class, [
-                'label' => 'city'
+                'label' => 'city',
+                'attr' => [
+                    'class' => 'form-control'
+
+                ]
             ])
             ->add('register', SubmitType::class, [
                 'attr' => [
-                    'class' => 'btn btn-info'
+                    'class' => 'btn btn-lg btn-info btn-block'
                 ]
             ])
         ;

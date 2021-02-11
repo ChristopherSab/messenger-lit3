@@ -22,7 +22,6 @@ class MessageController extends AbstractController
 {
 
     private $database;
-
     private $storage;
 
     public function __construct(Database $database, Storage $storage)
@@ -30,7 +29,6 @@ class MessageController extends AbstractController
         $this->database = $database;
         $this->storage = $storage;
     }
-
 
     /**
      *
@@ -73,15 +71,20 @@ class MessageController extends AbstractController
 
         foreach ($messages as $messagesKey => $messageId ) {
 
-            //dump($messages[$messagesKey]);
 
-
-            // - If a user makes a get request to receive messages, it changes their r -//
+            // - If a user makes a get request to receive messages, it changes the message read to true & Conversation to true -//
             if($messages[$messagesKey]['read'] === 'false' && $messages[$messagesKey]['sender'] === $contact){
 
                 $reference3 = $this->database->getReference('messages/'.$conversationID.'/'.$messagesKey);
-
                 $reference3->update(['read' => 'true']);
+
+
+                //Edd Below//
+                $reference4 = $this->database->getReference('/userChats/'.$loggedInUser.'/'.$contact.'/');
+                $reference4->update(['read' => 'true']);
+
+                $reference5 = $this->database->getReference('/userChats/'.$contact.'/'.$loggedInUser.'/');
+                $reference5->update(['read' => 'true']);
 
             }
 
@@ -113,24 +116,21 @@ class MessageController extends AbstractController
 
 
 
-    ////////////////////////////////////////////////
     /**
      *
-     * @Route("/chat_home/check_if_unread_messages/{contact}", name="get_unread_messages", methods="GET")
+     * @Route("/chat_home/check_if_unread_messages/{loggedInUser}", name="get_unread_messages", methods="GET")
      * @IsGranted("ROLE_USER")
-     * @param string $contact
+     * @param string $loggedInUser
      */
-    public function getUnReadMessages(string $contact, EntityManagerInterface $em) : Response
+    public function getUnReadMessages(string $loggedInUser, EntityManagerInterface $em) : Response
     {
 
-        //This is the current Logged in User
-        $loggedInUser = $this->getUser()->getUsername();
 
         //Find User In DataBase
         $Repository = $em->getRepository(User::class);
 
         $user = $Repository->findOneBy([
-            'username' => $contact,
+            'username' => $loggedInUser,
         ]);
 
         //Check If User Exists In Database
@@ -138,6 +138,8 @@ class MessageController extends AbstractController
             return new Response('Unable To Find user', 400);
         }
 
+
+        /*
         $reference = $this->database->getReference('/userChats/'.$loggedInUser.'/'.$contact.'/');
 
         $conversationID = $reference->getValue()['conversationID'];
@@ -147,15 +149,19 @@ class MessageController extends AbstractController
             return new Response('', 204);
         }
 
-        $reference = $this->database->getReference('messages/'.$conversationID.'/' )->orderByChild('time');
-        $messages = $reference->getValue();
+        */
 
-        return $this->json($messages);
+        //$reference = $this->database->getReference('messages/'.$conversationID.'/' )->orderByChild('time');
+        //$messages = $reference->getValue();
+
+        $reference = $this->database->getReference('/userChats/'.$loggedInUser.'/');
+        $conversations = $reference->getValue();
+
+
+
+        return $this->json($conversations);
 
     }
-
-
-    //////////////////////
 
 
     /**
@@ -168,7 +174,6 @@ class MessageController extends AbstractController
     public function postMessage(string $contact, Request $request)
     {
 
-        //This is the current Logged in User
         $loggedInUser = $this->getUser()->getUsername();
 
        $form_Message = $request->request->get('chat_form')['message'];
@@ -200,7 +205,6 @@ class MessageController extends AbstractController
 
 
         // -------- Message Data ------------- //
-
         $messageId = Uuid::uuid4();
 
         $message_content = [
@@ -250,7 +254,17 @@ class MessageController extends AbstractController
         $this->database->getReference('userChats/'.$loggedInUser.'/'.$contact.'/')
             ->update([
                 'conversationID' => $conversationID,
-                'read' => 'false'
+                'read' => 'false',
+                'sender' => $loggedInUser,
+                'receiver' => $contact
+            ]);
+
+        $this->database->getReference('userChats/'.$contact.'/'.$loggedInUser.'/')
+            ->update([
+                'conversationID' => $conversationID,
+                'read' => 'false',
+                'sender' => $contact,
+                'receiver' => $loggedInUser
             ]);
 
         return new Response();

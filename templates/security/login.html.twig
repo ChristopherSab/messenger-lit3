@@ -13,36 +13,45 @@
         </div>
     {% endif %}
 
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
 
-
-    {{ form_start(loginForm) }}
-    {{ form_row(loginForm.username) }}
-    {{ form_row(loginForm.password) }}
-    {{ form_row(loginForm.login) }}
-    {{ form_end(loginForm) }}
-
-
-    {#
-    <label for="inputUsername">Username</label>
-    <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control" required autofocus>
-    <label for="inputPassword">Password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" required>
-
-    <input type="hidden" name="_csrf_token"
-           value="{{ csrf_token('authenticate') }}"
-    >
-
-    #}
-
-    {#
-        Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-        See https://symfony.com/doc/current/security/remember_me.html
-
-        <div class="checkbox mb-3">
-            <label>
-                <input type="checkbox" name="_remember_me"> Remember me
-            </label>
+     <div class="container bootstrap snippets bootdey">
+        <div class="header">
+            <ul class="nav nav-pills pull-right">
+                <li><a href="#">&nbsp;</a></li>
+            </ul>
+            <h3 class="text-muted prj-name">RealTime Chat Application</h3>
         </div>
-    #}
+
+
+        <div style="height:auto;min-height:300px;" class="jumbotron">
+
+            <div class="col-md-4">
+                <img class="img-responsive center-block img-user" src="https://img.icons8.com/wired/64/000000/speech-bubble-with-dots.png">
+            </div>
+            <div class="col-md-6 form-content">
+
+                {{ form_start(loginForm, {attr: {class: "form-signin"}}) }}
+                {{ form_row(loginForm.username) }}
+                {{ form_row(loginForm.password) }}
+                {{ form_row(loginForm.login) }}
+                {{ form_end(loginForm) }}
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-12">
+        <div class="container bootstrap snippets bootdey">
+            <footer class="footer">
+                <p>&copy; Christopher Sabaoth [Wren Kitchens] </p>
+            </footer>
+        </div>
+    </div>
+
+
+
+
+
+
 {% endblock %}

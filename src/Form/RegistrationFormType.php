@@ -6,6 +6,7 @@ use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
@@ -16,8 +17,30 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('username')
-            ->add('email')
+            ->add('username', TextType::class, [
+                'label' => 'Username',
+                'constraints' => [
+                    new NotBlank(
+                        array('message' => 'Please Enter A Valid Username.')
+                    )
+                ],
+                'attr' => [
+                    'class' => 'form-control',
+                    'id' => 'username'
+                ]
+            ])
+            ->add('email', TextType::class, [
+                'label' => 'Email',
+                'constraints' => [
+                    new NotBlank(
+                        array('message' => 'Please Enter A Valid Email.')
+                    )
+                ],
+                'attr' => [
+                    'class' => 'form-control',
+                    'id' => 'username'
+                ]
+            ])
             ->add('plainPassword', PasswordType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
@@ -33,10 +56,14 @@ class RegistrationFormType extends AbstractType
                         'max' => 4096,
                     ]),
                 ],
+                'attr' => [
+                    'class' => 'form-control',
+                    'id' => 'password'
+                ]
             ])
             ->add('register', SubmitType::class, [
                 'attr' => [
-                    'class' => 'btn btn-info'
+                    'class' => 'btn btn-lg btn-info btn-block'
                 ]
             ])
         ;
