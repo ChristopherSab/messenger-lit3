@@ -13,20 +13,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8d05e92a-e58a-43b3-acc8-f3873582ec8f" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Service/MessageService.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/18ac1fd8-dd00-40c5-8981-c34129235527.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/18ac1fd8-dd00-40c5-8981-c34129235527.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/controllers/hello_controller.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/packages/cache.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/packages/cache.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/packages/security.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/packages/security.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/ChatHomeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ChatHomeController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/MessageController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/MessageController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Form/LoginFormType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/LoginFormType.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/chat/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/chat/index.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/AppBundle/Controller/SecurityControllerTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AppBundle/Controller/SecurityControllerTest.php" afterDir="false" />
-    </list>
+    <list default="true" id="8d05e92a-e58a-43b3-acc8-f3873582ec8f" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -275,7 +262,7 @@
       <workItem from="1613030706071" duration="15492000" />
       <workItem from="1613050025288" duration="5885000" />
       <workItem from="1613057565782" duration="23017000" />
-      <workItem from="1613376599514" duration="6710000" />
+      <workItem from="1613376599514" duration="6910000" />
     </task>
     <servers />
   </component>
