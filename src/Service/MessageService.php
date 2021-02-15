@@ -3,13 +3,10 @@
 
 namespace App\Service;
 
-
 use Kreait\Firebase\Database;
 use Kreait\Firebase\Storage;
 use Ramsey\Uuid\Uuid;
-use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\HttpFoundation\HeaderUtils;
-use Symfony\Component\HttpFoundation\Response;
 
 class MessageService
 {
@@ -20,13 +17,20 @@ class MessageService
     /** @var Storage */
     private $storage;
 
+
     public function __construct(Database $database, Storage $storage)
     {
         $this->database = $database;
         $this->storage = $storage;
     }
 
-
+    /**
+     *
+     * @return array
+     * @param string $conversationId
+     * @param string $loggedInUser
+     * @param string $contact
+     */
     public function returnFormattedMessages( string $conversationId, string $loggedInUser, string $contact): array
     {
 
@@ -78,7 +82,15 @@ class MessageService
 
     }
 
-    public function updateOrCreateNewConversation(string $loggedInUser, string $contact)
+
+    /**
+     * @return string
+     * @param string $loggedInUser
+     * @param string $contact
+     * @throws \Kreait\Firebase\Exception\DatabaseException
+     */
+
+    public function updateOrCreateNewConversation(string $loggedInUser, string $contact): string
     {
 
         $conversationId = $this->database->getReference('userChats/'.$loggedInUser.'/'.$contact.'/')->getValue()['conversationId'];
@@ -98,6 +110,13 @@ class MessageService
 
     }
 
+
+    /**
+     * @return array
+     * @param array $attachments
+     * @param string $conversationId
+     * @param string $messageId
+     */
     public function saveFilesToStorage(array $attachments, string $conversationId, string $messageId): array
     {
 
@@ -131,6 +150,39 @@ class MessageService
 
     }
 
+
+    /**
+     * @param string $conversationId
+     * @param string $messageId
+     * @param string $loggedInUser
+     * @param string $contact
+     * @param string $form_Message
+     * @throws \Kreait\Firebase\Exception\DatabaseException
+     */
+    public function saveMessageData(string $conversationId, string $messageId, string $loggedInUser, string $contact, string $form_Message)
+    {
+
+        $message_content = [
+            'sender' => $loggedInUser,
+            'receiver' => $contact,
+            'message' => $form_Message,
+            'time' => Database::SERVER_TIMESTAMP,
+            'email_sent' => 'false',
+            'read' => 'false'
+        ];
+
+
+        $this->database->getReference('messages/'.$conversationId.'/'.$messageId)
+            ->set($message_content);
+
+    }
+
+    /**
+     * @param string $loggedInUser
+     * @param string $conversationId
+     * @param string $contact
+     * @throws \Kreait\Firebase\Exception\DatabaseException
+     */
     public function saveUserChatData(string $loggedInUser, string $contact, string $conversationId)
     {
 
