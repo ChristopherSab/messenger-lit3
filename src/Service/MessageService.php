@@ -10,7 +10,6 @@ use Symfony\Component\HttpFoundation\HeaderUtils;
 
 class MessageService
 {
-
     /** @var Database */
     private $database;
 
@@ -25,11 +24,11 @@ class MessageService
     }
 
     /**
-     *
      * @return array
      * @param string $conversationId
      * @param string $loggedInUser
      * @param string $contact
+     * @throws \Kreait\Firebase\Exception\DatabaseException
      */
     public function returnFormattedMessages( string $conversationId, string $loggedInUser, string $contact): array
     {
@@ -71,11 +70,8 @@ class MessageService
                             ]);
 
                     }
-
                 }
-
             }
-
         }
 
         return $messages;
@@ -102,7 +98,6 @@ class MessageService
 
         $UserChat = $this->database->getReference('userChats/'.$loggedInUser.'/'.$contact.'/');
         $UserChat->set(["conversationId" => $conversationId]);
-
 
         }
 
@@ -140,7 +135,6 @@ class MessageService
                 $fileData = [
                     'originalFileName' => $file->getClientOriginalName(),
                     'fileType' => $file->getMimeType()
-
                 ];
 
                 $message_content['attachments'][$fileId->toString()] = $fileData;

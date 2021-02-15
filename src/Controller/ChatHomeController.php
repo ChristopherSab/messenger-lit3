@@ -15,7 +15,6 @@ class ChatHomeController extends AbstractController
 {
     /**
      * @Route("/chat_home/", name="chat_home", methods="GET")
-     * @IsGranted("ROLE_USER")
      */
     public function chatHomePage(EntityManagerInterface $em)
     {
