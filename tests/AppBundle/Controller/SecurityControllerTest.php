@@ -8,16 +8,12 @@ use App\Entity\User;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManager;
 use Liip\FunctionalTestBundle\Test\WebTestCase;
-use Symfony\Bundle\FrameworkBundle\Client;
-use Symfony\Component\Validator\ConstraintViolation;
-use Symfony\Component\Validator\ConstraintViolationList;
 
 
 class SecurityControllerTest extends WebTestCase
 {
 
     private $entityManager;
-
     private $client;
 
 
@@ -66,8 +62,6 @@ class SecurityControllerTest extends WebTestCase
     }
 
 
-
-
     public function testRegistrationIsSuccessful()
     {
         $crawler = $this->client->request('GET', '/register');
@@ -89,8 +83,7 @@ class SecurityControllerTest extends WebTestCase
         $this->assertValidationErrors([], $this->client->getContainer());
 
         $this->assertStatusCode(302, $this->client);
-        $this->assertResponseRedirects('/query');
-
+        $this->assertResponseRedirects('/register_profile');
 
         $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => 'email@example.com']);
         $this->assertNotNull($user);
@@ -106,6 +99,7 @@ class SecurityControllerTest extends WebTestCase
         // close entity manager to avoid memory leaks
         $this->entityManager->close();
         $this->entityManager = null;
+
     }
 
 

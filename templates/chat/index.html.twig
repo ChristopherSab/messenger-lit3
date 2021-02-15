@@ -135,37 +135,6 @@
         let loggedInUser = document.getElementById('user');
 
         // -----  AJAX To Load Unread Messages For Each Contact -----  //
-
-       /*
-        window.onload = function() {
-
-            for(let i = 0; i < contacts.length; i++){
-                $.ajax({
-                    method: 'GET',
-                    url: '/chat_home/check_if_unread_messages/' + contacts[i].innerText,
-                    success: function(data){
-
-                        displayUnreadMessages(data);
-
-                       // setInterval( ()=> displayUnreadMessages(data) , 10000);
-
-                        //console.log('checking for unread messages');
-                        //setInterval( ()=> console.log('checking for unread messages') , 10000);
-
-                    },
-                    error: function(){
-                        alert('error receiving data');
-                    },
-
-                })
-
-            }
-
-        };
-
-        */
-
-
         setInterval( ()=>
 
                 $.ajax({
@@ -175,15 +144,6 @@
 
                         displayUnreadMessages(data);
 
-
-                        //setInterval( (data)=> displayUnreadMessages(data) , 3000);
-
-                        //setInterval( ()=> displayUnreadMessages(data) , 3000);
-
-
-                        //console.log('checking for unread messages');
-                        //setInterval( ()=> console.log('checking for unread messages') , 3000);
-
                     },
                     error: function(){
                         alert('error receiving data');
@@ -192,33 +152,18 @@
                 })
 
 
-
-             , 3000);
-
-
-
-        ///
-
-        //setInterval( (data)=> displayUnreadMessages(data) , 3000);
-
-
+             , 7000);
 
 
         function displayUnreadMessages(data){
 
-
-           // console.log('this is the data' + data);
-
-
             let usersWithUnreadMessages = [];
-
 
             for(let key in data){
 
 
                 if(data[key]['read'] === 'false'){
 
-                   // console.log(data[key]['receiver']);
                     usersWithUnreadMessages.push(data[key]['receiver']);
                 }
 
@@ -229,10 +174,8 @@
 
                 if (usersWithUnreadMessages.includes(contacts[i].innerText)) {
 
-
                     contactProfile[i].nextElementSibling.removeAttribute("hidden");
 
-                    //console.log(contactProfile[i].nextElementSibling);
 
                 }
 
@@ -248,19 +191,18 @@
            e.nextElementSibling.style.display = "none";
 
             currentChatUserName.innerHTML = e.innerText;
-            //receiver = e.innerText;
+
             chatSection.removeAttribute("hidden");
+
             getMessagesFromDatabase();
 
-            setInterval( ()=> getMessagesFromDatabase() , 2000);
+            setInterval( ()=> getMessagesFromDatabase() , 5000);
 
             return false;
 
         }
 
         function getMessagesFromDatabase(){
-
-            //console.log('getting message');
 
             let receiverTemp = currentChatUserName.innerText;
 
@@ -270,11 +212,9 @@
                 success: function(data){
 
                     displayMessages(data);
-                    //alert('message received');
-
                 },
                 error: function(){
-                    //alert('error receiving message');
+                    alert('error receiving message');
                 }
             })
         }

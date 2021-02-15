@@ -29,8 +29,6 @@ class ChatHomeController extends AbstractController
             'controller_name' => 'Chat Home',
             'users' => $users
         ]);
-
     }
-
 
 }

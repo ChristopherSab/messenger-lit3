@@ -38,7 +38,9 @@ class LoginFormType extends AbstractType
                 'label' => 'Password',
                 'required' => false,
                 'constraints' => [
-                    new NotBlank()
+                    new NotBlank(
+                        array('message' => 'Please Enter A Valid Password.')
+                    )
                 ],
                 'attr' => [
                     'class' => 'form-control',

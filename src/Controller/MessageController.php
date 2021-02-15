@@ -3,13 +3,12 @@
 
 namespace App\Controller;
 
+use App\Service\MessageService;
 use App\Entity\User;
-use App\Form\ChatFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Kreait\Firebase\Database;
 use Kreait\Firebase\Storage;
 use Kreait\Firebase\Messaging;
-use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Ramsey\Uuid\Uuid;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -20,15 +19,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class MessageController extends AbstractController
 {
-
     private $database;
     private $storage;
+    private $messageService;
 
-    public function __construct(Database $database, Storage $storage)
+    public function __construct(Database $database, Storage $storage, MessageService $messageService)
     {
         $this->database = $database;
         $this->storage = $storage;
+        $this->messageService = $messageService;
     }
+
 
     /**
      *
@@ -39,13 +40,10 @@ class MessageController extends AbstractController
     public function getMessages(string $contact, EntityManagerInterface $em) : Response
     {
 
-        //This is the current Logged in User
         $loggedInUser = $this->getUser()->getUsername();
 
         //Find User In DataBase
-        $Repository = $em->getRepository(User::class);
-
-        $user = $Repository->findOneBy([
+        $user = $em->getRepository(User::class)->findOneBy([
             'username' => $contact,
         ]);
 
@@ -54,66 +52,19 @@ class MessageController extends AbstractController
             return new Response('Unable To Find user', 400);
         }
 
-        $reference = $this->database->getReference('/userChats/'.$loggedInUser.'/'.$contact.'/');
+        $userChat = $this->database->getReference('/userChats/'.$loggedInUser.'/'.$contact.'/');
+        $conversationId = $userChat->getValue()['conversationId'];
 
-        $conversationID = $reference->getValue()['conversationID'];
-
-        if(!$conversationID)
+        if(!$conversationId)
         {
             return new Response('', 204);
         }
 
-        $reference = $this->database->getReference('messages/'.$conversationID.'/' )->orderByChild('time');
-        $messages = $reference->getValue();
-
-
-       if($messages) {
-
-        foreach ($messages as $messagesKey => $messageId ) {
-
-
-            // - If a user makes a get request to receive messages, it changes the message read to true & Conversation to true -//
-            if($messages[$messagesKey]['read'] === 'false' && $messages[$messagesKey]['sender'] === $contact){
-
-                $reference3 = $this->database->getReference('messages/'.$conversationID.'/'.$messagesKey);
-                $reference3->update(['read' => 'true']);
-
-
-                //Edd Below//
-                $reference4 = $this->database->getReference('/userChats/'.$loggedInUser.'/'.$contact.'/');
-                $reference4->update(['read' => 'true']);
-
-                $reference5 = $this->database->getReference('/userChats/'.$contact.'/'.$loggedInUser.'/');
-                $reference5->update(['read' => 'true']);
-
-            }
-
-
-            // - Loop Through All The Conversation Messages, If attachment/s exist to create a downloadable link - //
-            if (array_key_exists('attachments', $messageId)) {
-
-                foreach ($messageId['attachments'] as $key => $fileId) {
-
-                    $messages[$messagesKey]['attachments'][$key]['signedUrl'] = "";
-
-                    $disposition = HeaderUtils::makeDisposition('attachment', $fileId['originalFileName']);
-
-                    $messages[$messagesKey]['attachments'][$key]['signedUrl'] = $this->storage->getBucket()->object('Attachments/'.$conversationID.'/'.$messageId['messageId'].'/'.$key)
-                        ->signedUrl(time() + 3600, [
-                            'responseDisposition' => $disposition
-                        ]);
-
-                    }
-
-                }
-
-            }
-
-        }
+        $messages = $this->messageService->returnFormattedMessages($conversationId, $loggedInUser, $contact);
 
         return $this->json($messages);
-    }
 
+    }
 
 
     /**
@@ -124,12 +75,8 @@ class MessageController extends AbstractController
      */
     public function getUnReadMessages(string $loggedInUser, EntityManagerInterface $em) : Response
     {
-
-
         //Find User In DataBase
-        $Repository = $em->getRepository(User::class);
-
-        $user = $Repository->findOneBy([
+        $user = $em->getRepository(User::class)->findOneBy([
             'username' => $loggedInUser,
         ]);
 
@@ -138,26 +85,8 @@ class MessageController extends AbstractController
             return new Response('Unable To Find user', 400);
         }
 
-
-        /*
-        $reference = $this->database->getReference('/userChats/'.$loggedInUser.'/'.$contact.'/');
-
-        $conversationID = $reference->getValue()['conversationID'];
-
-        if(!$conversationID)
-        {
-            return new Response('', 204);
-        }
-
-        */
-
-        //$reference = $this->database->getReference('messages/'.$conversationID.'/' )->orderByChild('time');
-        //$messages = $reference->getValue();
-
         $reference = $this->database->getReference('/userChats/'.$loggedInUser.'/');
         $conversations = $reference->getValue();
-
-
 
         return $this->json($conversations);
 
@@ -182,26 +111,8 @@ class MessageController extends AbstractController
            return new Response('You Cannot Send An Empty Message', 204);
        }
 
-
         // -------- Conversation Data -------- //
-        $conversationReference = $this->database->getReference('userChats/'.$loggedInUser.'/'.$contact.'/');
-
-        $conversationID = $conversationReference->getValue()['conversationID'];
-
-        if(!$conversationID)
-        {
-            $conversationID = Uuid::uuid4();
-            $conversationReference->set(["conversationID" => $conversationID]);
-
-            $conversationReference2 = $this->database->getReference('userChats/'.$contact.'/'.$loggedInUser.'/');
-
-            $conversationReference2->set(["conversationID" => $conversationID]);
-
-
-            $this->database->getReference('conversations/'.$conversationID.'/')
-            ->set(["conversationID" => $conversationID]);
-
-        }
+        $conversationId = $this->messageService->updateOrCreateNewConversation($loggedInUser, $contact);
 
 
         // -------- Message Data ------------- //
@@ -217,60 +128,22 @@ class MessageController extends AbstractController
             'read' => 'false'
         ];
 
-
         // -------- Attachments Data -------- //
         /** @var UploadedFile[] $attachments */
         $attachments = $request->files->get('chat_form')['attachment'];
 
-        $storageBucket = $this->storage->getBucket();
-
-
         if($attachments){
-
-            foreach($attachments as $file){
-
-                $fileId = Uuid::uuid4();
-
-                $storageBucket->upload(file_get_contents($file->getPathname()), [
-                    'name' => 'Attachments/'.$conversationID.'/'.$messageId.'/'.$fileId
-                ]);
-
-                $fileData = [
-                    'originalFileName' => $file->getClientOriginalName(),
-                    'fileType' => $file->getMimeType()
-
-                ];
-
-                $message_content['attachments'][$fileId->toString()] = $fileData;
-
-            }
+            $message_content['attachments'] = $this->messageService->saveFilesToStorage($attachments, $conversationId, $messageId);
         }
 
-        $this->database->getReference('messages/'.$conversationID.'/'.$messageId)
+        $this->database->getReference('messages/'.$conversationId.'/'.$messageId)
             ->set($message_content);
 
-
         // -------- User Chat Data ----------- //
-        $this->database->getReference('userChats/'.$loggedInUser.'/'.$contact.'/')
-            ->update([
-                'conversationID' => $conversationID,
-                'read' => 'false',
-                'sender' => $loggedInUser,
-                'receiver' => $contact
-            ]);
-
-        $this->database->getReference('userChats/'.$contact.'/'.$loggedInUser.'/')
-            ->update([
-                'conversationID' => $conversationID,
-                'read' => 'false',
-                'sender' => $contact,
-                'receiver' => $loggedInUser
-            ]);
+        $this->messageService->saveUserChatData($loggedInUser, $contact, $conversationId);
 
         return new Response();
 
     }
-
-
 
 }
