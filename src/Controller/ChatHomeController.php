@@ -13,7 +13,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ChatHomeController extends AbstractController
 {
-
     /**
      * @Route("/chat_home/", name="chat_home", methods="GET")
      * @IsGranted("ROLE_USER")
@@ -30,6 +29,5 @@ class ChatHomeController extends AbstractController
             'users' => $users
         ]);
     }
-    
 
 }
