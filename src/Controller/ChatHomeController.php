@@ -30,5 +30,6 @@ class ChatHomeController extends AbstractController
             'users' => $users
         ]);
     }
+    
 
 }
