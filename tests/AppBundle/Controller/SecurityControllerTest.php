@@ -7,13 +7,11 @@ use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManager;
 use Liip\FunctionalTestBundle\Test\WebTestCase;
 
-
 class SecurityControllerTest extends WebTestCase
 {
 
     private $entityManager;
     private $client;
-
 
     protected function setUp(): void
     {
@@ -59,7 +57,6 @@ class SecurityControllerTest extends WebTestCase
         $this->assertResponseRedirects('/login');
     }
 
-
     public function testRegistrationIsSuccessful()
     {
         $crawler = $this->client->request('GET', '/register');
@@ -89,16 +86,11 @@ class SecurityControllerTest extends WebTestCase
         $this->assertSame('SomeUser', $user->getUsername());
     }
 
-
     protected function tearDown(): void
     {
         parent::tearDown();
-
-        // close entity manager to avoid memory leaks
         $this->entityManager->close();
         $this->entityManager = null;
 
     }
-
-
 }
