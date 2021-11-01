@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Security;
 
 use App\Entity\User;
@@ -25,10 +27,26 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
     use TargetPathTrait;
 
     public const LOGIN_ROUTE = 'app_login';
+    public const CHAT_HOME_ROUTE = 'chat_home';
 
+    /**
+     * @var EntityManagerInterface
+     */
     private $entityManager;
+
+    /**
+     * @var UrlGeneratorInterface
+     */
     private $urlGenerator;
+
+    /**
+     * @var CsrfTokenManagerInterface
+     */
     private $csrfTokenManager;
+
+    /**
+     * @var UserPasswordEncoderInterface
+     */
     private $passwordEncoder;
 
     /**
@@ -37,23 +55,36 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
      * @param CsrfTokenManagerInterface $csrfTokenManager
      * @param UserPasswordEncoderInterface $passwordEncoder
      */
-    public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
-    {
+    public function __construct(
+        EntityManagerInterface $entityManager, 
+        UrlGeneratorInterface $urlGenerator, 
+        CsrfTokenManagerInterface $csrfTokenManager, 
+        UserPasswordEncoderInterface $passwordEncoder
+    ) {
         $this->entityManager = $entityManager;
         $this->urlGenerator = $urlGenerator;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->passwordEncoder = $passwordEncoder;
     }
 
-    public function supports(Request $request)
+    /**
+     * @param Request $request
+     * 
+     * @return bool
+     */
+    public function supports(Request $request): bool
     {
         return self::LOGIN_ROUTE === $request->attributes->get('_route')
             && $request->isMethod('POST');
     }
 
-    public function getCredentials(Request $request)
+     /**
+     * @param Request $request
+     * 
+     * @return array
+     */
+    public function getCredentials(Request $request): array
     {
-
         $formData = $request->request->get('login_form');
 
         $credentials = [
@@ -70,47 +101,75 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         return $credentials;
     }
 
-    public function getUser($credentials, UserProviderInterface $userProvider)
+    /**
+     * @param array $credentials
+     * 
+     * @return User
+     */
+    public function getUser($credentials, UserProviderInterface $userProvider): User
     {
         $token = new CsrfToken('authenticate', $credentials['csrf_token']);
         if (!$this->csrfTokenManager->isTokenValid($token)) {
             throw new InvalidCsrfTokenException();
         }
 
-        $user = $this->entityManager->getRepository(User::class)->findOneBy(['username' => $credentials['username']]);
+        $user = $this->entityManager
+        ->getRepository(User::class)
+        ->findOneBy([
+            'username' => $credentials['username']
+        ]);
 
         if (!$user) {
-            // fail authentication with a custom error
-            throw new CustomUserMessageAuthenticationException('Username could not be found.');
+            throw new CustomUserMessageAuthenticationException(User::NO_USER_FOUND_MSG);
         }
 
         return $user;
     }
 
-    public function checkCredentials($credentials, UserInterface $user)
+    /**
+     * @param array $credentials
+     * @param UserInterface $user
+     * 
+     * @return bool
+     */
+    public function checkCredentials($credentials, UserInterface $user): bool
     {
         return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
     }
 
     /**
-     * Used to upgrade (rehash) the user's password automatically over time.
+     * @param array $credentials
+     * 
+     * @return string|null
      */
     public function getPassword($credentials): ?string
     {
         return $credentials['password'];
     }
 
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $providerKey)
-    {
+    /**
+     * @param Request $request
+     * @param TokenInterface $token
+     * @param string $providerKey
+     * 
+     * @return Response
+     */
+    public function onAuthenticationSuccess(
+        Request $request, 
+        TokenInterface $token, 
+        string $providerKey
+    ): Response {
         if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
             return new RedirectResponse($targetPath);
         }
 
-        return new RedirectResponse($this->urlGenerator->generate('chat_home'));
-
+        return new RedirectResponse($this->urlGenerator->generate(self::CHAT_HOME_ROUTE));
     }
 
-    protected function getLoginUrl()
+    /**
+     * @return string
+     */
+    protected function getLoginUrl(): string
     {
         return $this->urlGenerator->generate(self::LOGIN_ROUTE);
     }

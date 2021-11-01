@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Service\MessageService;
@@ -16,29 +18,52 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class MessageController extends AbstractController
 {
+    private const EMPTY_REQUEST_CODE = 204;
+    private const BAD_REQUEST_CODE = 400;
+    private const NO_USER_FOUND_ERROR = 'Unable To Find user';
+    private const EMPTY_MESSAGE_ERROR = 'You Cannot Send An Empty Message';
+
+    /**
+     * @var Database
+     */
     private $database;
+
+    /**
+     * @var Storage
+     */
     private $storage;
+
+    /**
+     * @var MessageService
+     */
     private $messageService;
 
-    public function __construct(Database $database, Storage $storage, MessageService $messageService)
-    {
+    /**
+     * @param Database $database
+     * @param Storage $storage
+     * @param MessageService $messageService
+     */
+    public function __construct(
+        Database $database, 
+        Storage $storage, 
+        MessageService $messageService
+    ) {
         $this->database = $database;
         $this->storage = $storage;
         $this->messageService = $messageService;
     }
 
-
     /**
-     *
-     * @return Response
+     * @Route("/chat_home/new_message/{contact}", name="get_messages", methods="GET")
+     * 
      * @param string $contact
      * @param EntityManagerInterface $em
+     * 
      * @throws \Kreait\Firebase\Exception\DatabaseException
-     * @Route("/chat_home/new_message/{contact}", name="get_messages", methods="GET")
+     * @return Response
      */
     public function getMessages(string $contact, EntityManagerInterface $em) : Response
     {
-
         $loggedInUser = $this->getUser()->getUsername();
 
         $user = $em->getRepository(User::class)->findOneBy([
@@ -46,40 +71,44 @@ class MessageController extends AbstractController
         ]);
 
         if (!$user) {
-            return new Response('Unable To Find user', 400);
+            return new Response(self::NO_USER_FOUND_ERROR, self::BAD_REQUEST_CODE);
         }
 
         $userChat = $this->database->getReference('/userChats/'.$loggedInUser.'/'.$contact.'/');
         $conversationId = $userChat->getValue()['conversationId'];
 
         if (!$conversationId) {
-            return new Response('', 204);
+            return new Response('', self::EMPTY_MESSAGE_ERROR);
         }
 
-        $messages = $this->messageService->returnFormattedMessages($conversationId, $loggedInUser, $contact);
+        $messages = $this->messageService->returnFormattedMessages(
+            $conversationId, 
+            $loggedInUser, 
+            $contact
+        );
 
         return $this->json($messages);
-
     }
 
 
     /**
-     * @return Response
+     * @Route("/chat_home/check_if_unread_messages/{loggedInUser}", name="get_unread_messages", methods="GET")
+     * 
      * @param string $loggedInUser
      * @param EntityManagerInterface $em
+     * 
      * @throws \Kreait\Firebase\Exception\DatabaseException
-     * @Route("/chat_home/check_if_unread_messages/{loggedInUser}", name="get_unread_messages", methods="GET")
-     *
+     * 
+     * @return Response
      */
     public function getUnReadMessages(string $loggedInUser, EntityManagerInterface $em) : Response
     {
-
         $user = $em->getRepository(User::class)->findOneBy([
             'username' => $loggedInUser,
         ]);
 
         if(!$user){
-            return new Response('Unable To Find user', 400);
+            return new Response(self::NO_USER_FOUND_ERROR, 400);
         }
 
         $reference = $this->database->getReference('/userChats/'.$loggedInUser.'/');
@@ -89,44 +118,55 @@ class MessageController extends AbstractController
 
     }
 
-
     /**
-     * @return Response
+     * @Route("/chat_home/{contact}", name="post_message", methods="POST")
      * @param Request $request
      * @param string $contact
+     * 
      * @throws \Kreait\Firebase\Exception\DatabaseException
-     * @Route("/chat_home/{contact}", name="post_message", methods="POST")
-     *
+     * 
+     * @return Response
      */
     public function postMessage(string $contact, Request $request): Response
     {
-
         $loggedInUser = $this->getUser()->getUsername();
 
-       $form_Message = $request->request->get('chat_form')['message'];
+        $form_Message = $request->request->get('chat_form')['message'];
 
-       if($form_Message === ''){
-           return new Response('You Cannot Send An Empty Message', 204);
-       }
+        if ($form_Message === '') {
+            return new Response(self::EMPTY_MESSAGE_ERROR, self::EMPTY_REQUEST_CODE);
+        }
 
         $conversationId = $this->messageService->updateOrCreateNewConversation($loggedInUser, $contact);
 
         $messageId = Uuid::uuid4();
 
-        // -------- Save Attachments To Storage & Create Reference In RealTime Database -------- //
         /** @var UploadedFile[] $attachments */
         $attachments = $request->files->get('chat_form')['attachment'];
 
-        if($attachments){
-            $message_content['attachments'] = $this->messageService->saveFilesToStorage($attachments, $conversationId, $messageId);
+        if ($attachments) {
+            $message_content['attachments'] = $this->messageService->saveFilesToStorage(
+                $attachments, 
+                $conversationId, 
+                $messageId
+            );
         }
 
-        $this->messageService->saveMessageData($conversationId, $messageId, $loggedInUser, $contact, $form_Message);
+        $this->messageService->saveMessageData(
+            $conversationId, 
+            $messageId, 
+            $loggedInUser, 
+            $contact, 
+            $form_Message
+        );
 
-        $this->messageService->saveUserChatData($loggedInUser, $contact, $conversationId);
+        $this->messageService->saveUserChatData(
+            $loggedInUser, 
+            $contact, 
+            $conversationId
+        );
 
         return new Response();
 
     }
-
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Form;
 
 use App\Entity\User;
@@ -14,14 +16,18 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class RegistrationFormType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('username', TextType::class, [
                 'label' => 'Username',
                 'constraints' => [
                     new NotBlank(
-                        array('message' => 'Please Enter A Valid Username.')
+                        array('message' => User::VALID_USERNAME_ERROR)
                     )
                 ],
                 'attr' => [
@@ -33,7 +39,7 @@ class RegistrationFormType extends AbstractType
                 'label' => 'Email',
                 'constraints' => [
                     new NotBlank(
-                        array('message' => 'Please Enter A Valid Email.')
+                        array('message' => User::VALID_EMAIL_ERROR)
                     )
                 ],
                 'attr' => [
@@ -42,17 +48,14 @@ class RegistrationFormType extends AbstractType
                 ]
             ])
             ->add('plainPassword', PasswordType::class, [
-                // instead of being set onto the object directly,
-                // this is read and encoded in the controller
                 'mapped' => false,
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please enter a password',
+                        'message' => User::VALID_PASSWORD_ERROR,
                     ]),
                     new Length([
                         'min' => 6,
-                        'minMessage' => 'Your password should be at least {{ limit }} characters',
-                        // max length allowed by Symfony for security reasons
+                        'minMessage' => User::PASSWORD_MINIMUM_WARNING,
                         'max' => 4096,
                     ]),
                 ],
@@ -69,7 +72,10 @@ class RegistrationFormType extends AbstractType
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    /**
+     * @param OptionsResolver $resolver
+     */
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => User::class,

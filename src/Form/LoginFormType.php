@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Form;
 
@@ -15,18 +16,17 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class LoginFormType extends AbstractType
 {
     /**
-     * Login form builder.
      * @param FormBuilderInterface $builder
      * @param array $options
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('username', TextType::class, [
                 'label' => 'Username',
                 'constraints' => [
                     new NotBlank(
-                        array('message' => 'Please Enter A Valid Username.')
+                        array('message' => User::VALID_USERNAME_ERROR)
                     )
                 ],
                 'attr' => [
@@ -39,7 +39,7 @@ class LoginFormType extends AbstractType
                 'required' => false,
                 'constraints' => [
                     new NotBlank(
-                        array('message' => 'Please Enter A Valid Password.')
+                        array('message' => User::VALID_PASSWORD_ERROR)
                     )
                 ],
                 'attr' => [
@@ -58,7 +58,7 @@ class LoginFormType extends AbstractType
     /**
      * @param OptionsResolver $resolver
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'csrf_protection' => true,
@@ -67,5 +67,4 @@ class LoginFormType extends AbstractType
             'csrf_token_id' => 'authenticate'
         ]);
     }
-
 }

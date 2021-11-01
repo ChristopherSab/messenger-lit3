@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\Profile;
@@ -17,9 +19,19 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
+    public const CHAT_HOME_ROUTE = 'chat_home';
+    private const LOGIN_TWIG_FILE = 'security/login.html.twig';
+    private const REGISTRATION_TWIG_FILE = 'security/register.html.twig';
 
     /**
      * @Route("/register", name="app_register")
+     * 
+     * @param Request $request
+     * @param UserPasswordEncoderInterface $passwordEncoder
+     * @param LoginFormAuthenticator $login
+     * @param GuardAuthenticatorHandler $guard
+     * 
+     * @return Response
      */
     public function register(
         Request $request, 
@@ -32,7 +44,6 @@ class SecurityController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $user->setPassword(
                 $passwordEncoder->encodePassword(
                     $user,
@@ -43,14 +54,18 @@ class SecurityController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
-            // do anything else you need here, like send an email
 
-            $guard->authenticateUserAndHandleSuccess($user, $request, $login, 'main');
+            $guard->authenticateUserAndHandleSuccess(
+                $user, 
+                $request, 
+                $login, 
+                'main'
+            );
 
-            return $this->redirectToRoute('chat_home');
+            return $this->redirectToRoute(self::CHAT_HOME_ROUTE);
         }
 
-        return $this->render('security/register.html.twig', [
+        return $this->render(self::REGISTRATION_TWIG_FILE, [
             'registrationForm' => $form->createView(),
         ]);
     }
@@ -58,26 +73,33 @@ class SecurityController extends AbstractController
 
     /**
      * @Route("/login", name="app_login")
+     * 
+     * @param AuthenticationUtils $authenticationUtils
+     * 
+     * @return Response
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-
-        // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
-        // last username entered by the user
+
         $lastUsername = $authenticationUtils->getLastUsername();
 
         $form = $this->createForm(LoginFormType::class);
 
-        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error,
-            'loginForm' => $form->createView()]);
+        return $this->render(
+            self::LOGIN_TWIG_FILE, [
+            'last_username' => $lastUsername, 
+            'error' => $error,
+            'loginForm' => $form->createView()
+            ]
+        );
     }
 
     /**
      * @Route("/logout", name="app_logout")
      */
-    public function logout()
+    public function logout(): void
     {
-        throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+        throw new \LogicException('');
     }
 }

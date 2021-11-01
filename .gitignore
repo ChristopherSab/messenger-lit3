@@ -12,6 +12,7 @@ src/Controller/TestController.php
 .env.test
 vendor/
 var/
+.vscode
 ###< symfony/framework-bundle ###
 
 ###> symfony/phpunit-bridge ###

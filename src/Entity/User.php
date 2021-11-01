@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Entity;
+declare(strict_types=1);
 
+namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -16,6 +17,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class User implements UserInterface
 {
+    public const NO_USER_FOUND_MSG = 'Username could not be found.';
+    public const VALID_USERNAME_ERROR = 'Please Enter A Valid Username.';
+    public const VALID_PASSWORD_ERROR = 'Please Enter A Valid Password.';
+    public const VALID_EMAIL_ERROR = 'Please Enter A Valid Email.';
+    public const PASSWORD_MINIMUM_WARNING = 'Your password should be at least {{ limit }} characters';
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -47,15 +54,15 @@ class User implements UserInterface
      */
     private $email;
 
-
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
-     * A visual identifier that represents this user.
-     *
      * @see UserInterface
      */
     public function getUsername(): string
@@ -63,6 +70,11 @@ class User implements UserInterface
         return (string) $this->username;
     }
 
+    /**
+     * @param string|null $username
+     * 
+     * @return self
+     */
     public function setUsername(?string $username): self
     {
         $this->username = $username;
@@ -76,12 +88,16 @@ class User implements UserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
     }
 
+    /**
+     * @param array $roles
+     * 
+     * @return self
+     */
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
@@ -97,6 +113,11 @@ class User implements UserInterface
         return (string) $this->password;
     }
 
+    /**
+     * @param string $password
+     * 
+     * @return self
+     */
     public function setPassword(string $password): self
     {
         $this->password = $password;
@@ -109,7 +130,6 @@ class User implements UserInterface
      */
     public function getSalt()
     {
-        // not needed when using the "bcrypt" algorithm in security.yaml
     }
 
     /**
@@ -117,23 +137,25 @@ class User implements UserInterface
      */
     public function eraseCredentials()
     {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
     }
 
+    /**
+     * @return string|null
+     */
     public function getEmail(): ?string
     {
         return $this->email;
     }
-
+    
+    /**
+     * @param string $email
+     * 
+     * @return self
+     */
     public function setEmail(string $email): self
     {
         $this->email = $email;
 
         return $this;
     }
-
-
-
-
 }

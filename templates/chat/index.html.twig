@@ -4,13 +4,12 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 {% endblock %}
 
-
 {% block body %}
 
     <nav class=" navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             {% if app.user %}
-            <a class="navbar-brand" href="#">Welcome {{ app.user.username  }}</a>
+                <a class="navbar-brand" href="#">Welcome {{ app.user.username  }}</a>
                 <div id="user" style="display: none;">{{ app.user.username }}</div>
                 <div id="receiver" style="display: none;"></div>
             {% endif %}
@@ -18,6 +17,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+
                 <div class="navbar-nav">
                     {% if app.user %}
                     <a class="nav-link" href="{{ path('app_logout') }}">Logout</a>
@@ -45,7 +45,6 @@
                             </div>
                         </div>
 
-
                         {% for user in users %}
                              {%  if user.username != app.user.username %}
                              <a id="contact-profile"  onclick="loadSelectedChat(this)"  class="contact-profile list-group-item list-group-item-action border-0" >
@@ -64,7 +63,6 @@
                         {% endif  %}
                         {% endfor %}
 
-
                         <hr class="d-block d-lg-none mt-1 mb-0">
                     </div>
                     <div hidden id="chat-section" class="col-12 col-lg-7 col-xl-3">
@@ -76,7 +74,6 @@
 
                                 {# ------ Other User ----   #}
                                 <div id="currentChatUserName"  class="flex-grow-1 pl-3">
-
 
                                 </div>
                                 {# ------ Other User ----   <strong id="currentChatUserName"></strong> #}
@@ -119,9 +116,7 @@
             </div>
         </div>
     </main>
-
     <script>
-
         let currentChatUserName = document.getElementById('currentChatUserName');
         let chatSection = document.getElementById('chat-section');
         let newMessageArea = document.getElementById('new-message');
@@ -138,53 +133,34 @@
                     method: 'GET',
                     url: '/chat_home/check_if_unread_messages/' + loggedInUser.innerText,
                     success: function(data){
-
                         displayUnreadMessages(data);
-
                     },
                     error: function(){
                         alert('error receiving data');
                     },
-
                 })
 
-
              , 7000);
-
 
         function displayUnreadMessages(data){
 
             let usersWithUnreadMessages = [];
 
-            for(let key in data){
-
-
-                if(data[key]['read'] === 'false'){
-
+            for (let key in data) {
+                if (data[key]['read'] === 'false') {
                     usersWithUnreadMessages.push(data[key]['receiver']);
                 }
-
             }
 
-
-            for(let i = 0; i < contacts.length; i++) {
-
+            for (let i = 0; i < contacts.length; i++) {
                 if (usersWithUnreadMessages.includes(contacts[i].innerText)) {
-
                     contactProfile[i].nextElementSibling.removeAttribute("hidden");
-
-
                 }
-
             }
-
-
         }
 
-        
         // -----  AJAX To Load User Messages FROM API EndPoint -----  //
         function loadSelectedChat(e){
-
            e.nextElementSibling.style.display = "none";
 
             currentChatUserName.innerHTML = e.innerText;
@@ -199,10 +175,8 @@
 
         }
 
-        function getMessagesFromDatabase(){
-
+        function getMessagesFromDatabase() {
             let receiverTemp = currentChatUserName.innerText;
-
             $.ajax({
                 method: 'GET',
                 url: '/chat_home/new_message/' + receiverTemp,
@@ -216,14 +190,9 @@
             })
         }
 
-
-        function displayMessages(data){
-
+        function displayMessages(data) {
             let message = '';
-
-            for(let key in data)
-            {
-
+            for (let key in data) {
                 const time = new Date(data[key]['time']).toLocaleTimeString();
                 const date = new Date(data[key]['time']).toLocaleDateString();
 
@@ -238,14 +207,11 @@
                      '          <div class="text-muted small text-nowrap mt-2">' + time + '</div>\n' +
                     '        </div>';
 
-                    for( let attachmentKey in data[key]['attachments']){
-
+                    for ( let attachmentKey in data[key]['attachments']) {
                         message +=  "<a href='"+data[key]['attachments'][attachmentKey]['signedUrl']+"'>Download: "+data[key]['attachments'][attachmentKey]['originalFileName'] +" </a>";
                     }
 
-
                  }else{
-
                     message += '  <div>\n' +
                         '        </div>\n' +
                         '        <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">\n' +
@@ -264,9 +230,7 @@
 
         // ----- AJAX To POST User Message TO API EndPoint -----  //
         $(function () {
-
             $(document).on('click', '#form-submit', function(e) {
-
                 //This is the selected User who the message is being sent TO
                 let contact = $('#currentChatUserName')[0].innerText;
 
@@ -284,24 +248,14 @@
                     success: function(){
                         //alert('message sent');
                         console.log('message sent');
-
                         $('#chat_form_message').val('');
-
                         $('#chat_form_attachment').val('');
-
                     },
                     error: function(){
                         alert('error sending message');
                     }
-
                 })
-
             });
-
         });
-
     </script>
-
 {% endblock %}
-
-

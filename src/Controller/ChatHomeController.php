@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Controller;
-
 
 use App\Entity\User;
 use App\Form\ChatFormType;
@@ -15,8 +15,12 @@ class ChatHomeController extends AbstractController
 {
     /**
      * @Route("/chat_home/", name="chat_home", methods="GET")
+     * 
+     * @param EntityManagerInterface $em
+     * 
+     * @return Response
      */
-    public function chatHomePage(EntityManagerInterface $em)
+    public function chatHomePage(EntityManagerInterface $em): Response
     {
         $form = $this->createForm(ChatFormType::class);
         $Repository = $em->getRepository(User::class);
@@ -28,5 +32,4 @@ class ChatHomeController extends AbstractController
             'users' => $users
         ]);
     }
-
 }
