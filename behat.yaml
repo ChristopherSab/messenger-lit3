@@ -8,7 +8,7 @@ default:
   extensions:
     FriendsOfBehat\SymfonyExtension: null
     Behat\MinkExtension:
-      base_url: https://symfony-sandbox.dev.wrenkitchens.com/
+      base_url: http://localhost:8000/
       goutte: ~
       sessions:
         symfony:

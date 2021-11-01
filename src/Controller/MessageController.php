@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Controller;
 
 use App\Service\MessageService;
@@ -46,15 +45,14 @@ class MessageController extends AbstractController
             'username' => $contact,
         ]);
 
-        if(!$user){
+        if (!$user) {
             return new Response('Unable To Find user', 400);
         }
 
         $userChat = $this->database->getReference('/userChats/'.$loggedInUser.'/'.$contact.'/');
         $conversationId = $userChat->getValue()['conversationId'];
 
-        if(!$conversationId)
-        {
+        if (!$conversationId) {
             return new Response('', 204);
         }
 

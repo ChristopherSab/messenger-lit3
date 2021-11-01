@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Tests\AppBundle\Controller;
-
 
 use App\Entity\User;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;

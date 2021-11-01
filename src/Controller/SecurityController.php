@@ -21,9 +21,12 @@ class SecurityController extends AbstractController
     /**
      * @Route("/register", name="app_register")
      */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, LoginFormAuthenticator $login, GuardAuthenticatorHandler $guard): Response
-    {
-
+    public function register(
+        Request $request, 
+        UserPasswordEncoderInterface $passwordEncoder, 
+        LoginFormAuthenticator $login, 
+        GuardAuthenticatorHandler $guard
+    ): Response {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
@@ -44,7 +47,7 @@ class SecurityController extends AbstractController
 
             $guard->authenticateUserAndHandleSuccess($user, $request, $login, 'main');
 
-            return $this->redirectToRoute('app_register_profile');
+            return $this->redirectToRoute('chat_home');
         }
 
         return $this->render('security/register.html.twig', [

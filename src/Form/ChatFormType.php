@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Form;
-
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -18,14 +16,13 @@ class ChatFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('message', TextType::class, ['label' => 'Message:',
+        $builder
+            ->add('message', TextType::class, ['label' => 'Message:',
             'attr' => [
                 'class' => 'form-control',
                 'id' => 'content',
                 'placeholder' => 'Type Your Message'
             ]])
-
-
             ->add('attachment', FileType::class, ['label' => 'Upload File>>>', 'mapped' => false,
                 'required' => false,
                 'multiple' => true

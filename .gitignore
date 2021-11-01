@@ -8,6 +8,10 @@ src/Controller/TestController.php
 /public/bundles/
 /var/
 /vendor/
+.env
+.env.test
+vendor/
+var/
 ###< symfony/framework-bundle ###
 
 ###> symfony/phpunit-bridge ###
