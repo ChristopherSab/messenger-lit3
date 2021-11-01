@@ -33,7 +33,8 @@ If you get an error that the database exists, that should be ok. But if you have
 
 You can use Nginx or Apache, but the built-in web server works great:
 
-php bin/console server:run OR symfony serve . Now check out the site at http://localhost:8000
+php bin/console server:run OR symfony serve . Now check out the site at 
+http://localhost:8000/register && http://127.0.0.1:8000/login
 
 **Have fun!**
 
